@@ -1,4 +1,4 @@
-const User = require('../../server/db/models/User');
+const { Event, User, Trip } = require('../../server/db/models');
 const db = require('../../server/db');
 describe('User Model', () => {
   let user;
