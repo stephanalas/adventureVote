@@ -21,7 +21,7 @@ describe('Event Model', () => {
       location: 'vegas',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: trip.id,
-      userId: user.id,
+      creatorId: user.id,
     });
   });
   it('has location', () => {
@@ -30,8 +30,8 @@ describe('Event Model', () => {
   it('has a trip id', () => {
     expect(event.tripId).toBe(trip.id);
   });
-  it('has a user id', () => {
-    expect(event.userId).toBe(1);
+  it('has a creator id', () => {
+    expect(event.creatorId).toBe(1);
   });
   afterAll(async () => {
     await db.close();

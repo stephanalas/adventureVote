@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 const db = require('..');
-
+const Trip_Attendee = require('./TripAttendee');
 class Trip extends Model {}
 
 Trip.init(
@@ -20,11 +20,22 @@ Trip.init(
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    activity: {
-      type: DataTypes.STRING,
-    },
   },
-  { sequelize: db, modelName: 'trip' }
+  {
+    sequelize: db,
+    modelName: 'trip',
+    hooks: {
+      afterCreate: async (trip) => {
+        const creator = await trip.getCreator();
+        if (creator) {
+          await Trip_Attendee.create({
+            tripId: trip.id,
+            attendeeId: creator.id,
+          });
+        }
+      },
+    },
+  }
 );
 
 module.exports = Trip;
