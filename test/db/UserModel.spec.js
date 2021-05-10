@@ -89,6 +89,11 @@ describe('User Model', () => {
   it('User password should be hashed', () => {
     expect(user1.password).not.toBe('password123');
   });
+  it('User password is hashed when updated', async () => {
+    user1.password = 'hello';
+    await user1.save();
+    expect(user1.password).not.toBe('hello');
+  });
   it('User can have many friends', async () => {
     const friends = await user1.getFriends();
     expect(friends.length).toBe(2);

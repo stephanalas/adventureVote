@@ -24,6 +24,9 @@ User.init(
       beforeCreate: async (user) => {
         user.password = await bcrypt.hash(user.password, 12);
       },
+      afterUpdate: async (user) => {
+        user.password = await bcrypt.hash(user.password, 12);
+      },
     },
     sequelize: db,
     modelName: 'user',
