@@ -71,6 +71,54 @@ describe('User router', () => {
       expect(response.status).toBe(200);
     });
   });
+
+  describe('POST /users/:id/trips', () => {
+    it('user can create a trip', async () => {
+      const tripInfo = {
+        name: 'Snowboarding trip',
+        location: 'Poconos, Pennsylvannia',
+        startDate: '2021-08-30',
+        endDate: '2021-09-05',
+        creatorId: backUpUser.id,
+      };
+      const response = await mockApp
+        .post(`/api/users/${backUpUser.id}/trips`)
+        .send(tripInfo);
+      const trip = response.body;
+      expect(trip.name).toBe('Snowboarding Trip');
+      expect(trip.creatorId).toBe(backUpUser.id);
+    });
+  });
+  describe('GET /users/:id/trips/', () => {
+    it('returns all of users trips', async () => {
+      const tripInfo = {
+        name: 'Lets go to Miami!',
+        location: 'Miami, Florida',
+        startDate: '2021-07-30',
+        endDate: '2021-08-03',
+        creatorId: backUpUser.id,
+        activity: 'vacation',
+      };
+      let newTrip = await mockApp
+        .post(`/api/users/${backUpUser.id}/trips`)
+        .send(tripInfo);
+      newTrip = newTrip.body;
+      let foundTrip = false;
+
+      const response = await mockApp.get(`/api/users/${backUpUser.id}/trips`);
+      const userTrips = response.body;
+      userTrips.forEach((trip) => {
+        if (newTrip.id === trip.id) foundTrip = true;
+      });
+      expect(userTrips.length).toBeTruthy();
+      expect(foundTrip).toBeTruthy();
+    });
+    // describe('PUT /api/users/:userId/trips/:tripId', () => {
+    //   it('user can update their trip', () => {
+
+    //   })
+    // })
+  });
   afterAll(async () => {
     await db.close();
   });
