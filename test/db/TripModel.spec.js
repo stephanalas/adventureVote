@@ -1,4 +1,9 @@
-const { Event, User, Trip, Trip_Attendee } = require('../../server/db/models');
+const {
+  TripEvent,
+  User,
+  Trip,
+  Trip_Attendee,
+} = require('../../server/db/models');
 const db = require('../../server/db');
 describe('Trip Model', () => {
   let trip, user1, user2, event1, event2;
@@ -22,14 +27,14 @@ describe('Trip Model', () => {
       creatorId: user1.id,
       activity: 'gambling',
     });
-    event1 = await Event.create({
+    event1 = await TripEvent.create({
       name: 'Hit the strip',
       location: 'vegas',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: trip.id,
       userId: user1.id,
     });
-    event2 = await Event.create({
+    event2 = await TripEvent.create({
       name: 'eat some food',
       location: 'vegas',
       startTime: '2021-08-31 15:28:01.306-04',

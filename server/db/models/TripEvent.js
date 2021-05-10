@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require('sequelize');
 const db = require('..');
 
-class Event extends Model {}
+class TripEvent extends Model {}
 
-Event.init(
+TripEvent.init(
   {
     name: {
       type: DataTypes.STRING,
@@ -23,4 +23,4 @@ Event.init(
   { sequelize: db, modelName: 'event' }
 );
 
-module.exports = Event;
+module.exports = TripEvent;

@@ -1,4 +1,9 @@
-const { Event, User, Trip, User_Friend } = require('../../server/db/models');
+const {
+  TripEvent,
+  User,
+  Trip,
+  User_Friend,
+} = require('../../server/db/models');
 const db = require('../../server/db');
 describe('User Model', () => {
   let user1, user2, user3;
@@ -50,28 +55,28 @@ describe('User Model', () => {
       activity: 'siteseeing',
     });
 
-    event1 = await Event.create({
+    event1 = await TripEvent.create({
       name: 'Hit the strip',
       location: 'vegas',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: trip1.id,
       creatorId: user1.id,
     });
-    event2 = await Event.create({
+    event2 = await TripEvent.create({
       name: 'eat some food',
       location: 'vegas',
       startTime: '2021-08-31 15:28:01.306-04',
       tripId: trip1.id,
       creatorId: user1.id,
     });
-    event3 = await Event.create({
+    event3 = await TripEvent.create({
       name: 'brunch',
       location: 'Washington D.C.',
       startTime: '2021-08-31 15:28:01.306-04',
       tripId: trip2.id,
       creatorId: user1.id,
     });
-    event4 = await Event.create({
+    event4 = await TripEvent.create({
       name: 'Museum',
       location: 'Washington D.C.',
       startTime: '2021-08-31 15:28:01.306-04',
@@ -103,7 +108,7 @@ describe('User Model', () => {
     expect(trips.length).toBe(2);
   });
   it('User can have many events', async () => {
-    const events = await Event.findAll({
+    const events = await TripEvent.findAll({
       where: {
         creatorId: user1.id,
       },

@@ -1,4 +1,3 @@
-const { response } = require('express');
 const supertest = require('supertest');
 const app = require('../../../server/app');
 const db = require('../../../server/db');

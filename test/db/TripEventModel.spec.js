@@ -1,6 +1,6 @@
-const { Event, User, Trip } = require('../../server/db/models');
+const { TripEvent, User, Trip } = require('../../server/db/models');
 const db = require('../../server/db');
-describe('Event Model', () => {
+describe('TripEvent Model', () => {
   let trip, event, user;
   beforeAll(async () => {
     await db.sync({ force: true });
@@ -16,7 +16,7 @@ describe('Event Model', () => {
       endDate: '2021-09-05',
       userId: user.id,
     });
-    event = await Event.create({
+    event = await TripEvent.create({
       name: 'Hit the strip',
       location: 'vegas',
       startTime: '2021-08-31 11:28:01.306-04',

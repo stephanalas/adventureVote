@@ -2,7 +2,7 @@ const db = require('./db');
 const {
   User,
   Trip,
-  Event,
+  TripEvent,
   User_Friend,
   Trip_Attendee,
 } = require('./db/models');
@@ -118,7 +118,7 @@ const seed = async () => {
     tubbing,
     iceSkating,
   ] = await Promise.all([
-    Event.create({
+    TripEvent.create({
       name: 'gambling',
       location: 'vegas',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -126,7 +126,7 @@ const seed = async () => {
       userId: steph.id,
       activity: 'gambling',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'Stand Up Comedy',
       location: 'vegas',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -134,7 +134,7 @@ const seed = async () => {
       userId: steph.id,
       activity: 'show',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'Dinner',
       location: 'vegas',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -142,7 +142,7 @@ const seed = async () => {
       userId: steph.id,
       activity: 'dinner',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'Rock Climbing',
       location: 'Rocky Mountains',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -150,7 +150,7 @@ const seed = async () => {
       userId: john.id,
       activity: 'outdoor',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'Canoeing',
       location: 'Rocky Mountains',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -158,7 +158,7 @@ const seed = async () => {
       userId: john.id,
       activity: 'outdoor',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'Rafting',
       location: 'Rocky Mountains',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -166,7 +166,7 @@ const seed = async () => {
       userId: john.id,
       activity: 'outdoor',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'Scuba Diving',
       location: 'Miami, Florida',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -174,7 +174,7 @@ const seed = async () => {
       userId: charrice.id,
       activity: 'outdoor',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'beach',
       location: 'Miami, Florida',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -182,7 +182,7 @@ const seed = async () => {
       userId: charrice.id,
       activity: 'show',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'clubbing',
       location: 'Miami, Florida',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -190,7 +190,7 @@ const seed = async () => {
       userId: charrice.id,
       activity: 'club',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'snowboarding',
       location: 'Poconos, Pennsylvannia',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -198,7 +198,7 @@ const seed = async () => {
       userId: jane.id,
       activity: 'wintersports',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'tubbing',
       location: 'Poconos, Pennsylvannia',
       startTime: '2021-08-31 11:28:01.306-04',
@@ -206,7 +206,7 @@ const seed = async () => {
       userId: jane.id,
       activity: 'wintersports',
     }),
-    Event.create({
+    TripEvent.create({
       name: 'ice skating',
       location: 'Poconos, Pennsylvannia',
       startTime: '2021-08-31 11:28:01.306-04',

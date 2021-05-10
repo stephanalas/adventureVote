@@ -1,8 +1,8 @@
 const users = require('express').Router();
-const { User } = require('../db/models');
+const { User, Trip, TripEvent } = require('../db/models');
 
 users.get('/', (req, res, next) => {
-  User.findAll()
+  User.findAll({ include: [Trip] })
     .then((users) => {
       res.status(200).send(users);
     })
