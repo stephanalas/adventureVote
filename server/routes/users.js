@@ -2,7 +2,12 @@ const users = require('express').Router();
 const { User, Trip, TripEvent } = require('../db/models');
 
 users.get('/', (req, res, next) => {
-  User.findAll({ include: [Trip] })
+  User.findAll({
+    include: {
+      model: Trip,
+      include: [TripEvent],
+    },
+  })
     .then((users) => {
       res.status(200).send(users);
     })
