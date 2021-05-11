@@ -31,6 +31,16 @@ users.get('/:id', (req, res, next) => {
     where: {
       id: req.params.id,
     },
+    include: [
+      {
+        model: Trip,
+        include: [TripEvent],
+      },
+      {
+        model: User,
+        as: 'friends',
+      },
+    ],
   })
     .then((user) => {
       res.status(200).send(user);
@@ -92,6 +102,45 @@ users.get('/:id/trips', (req, res, next) => {
     },
   }).then((trips) => {
     res.send(trips).status(200);
+  });
+});
+// users.get('/:userId/trips/:tripId', (req, res, next) => {});
+
+users.put('/:userId/trips/:tripId', (req, res, next) => {
+  const { name, location, startDate, endDate } = req.body;
+  Trip.findOne({
+    where: {
+      id: req.params.tripId,
+      creatorId: req.params.userId,
+    },
+  }).then((trip) => {
+    trip.name = name;
+    trip.location = location;
+    trip.startDate = startDate;
+    trip.endDate = endDate;
+    res.send(trip).status(200);
+  });
+});
+
+users.put('/:userId/trips/:tripId/events/:eventId', (req, res, next) => {
+  TripEvent.findOne({
+    where: {
+      id: req.params.eventId,
+      tripId: req.params.tripId,
+    },
+  }).then();
+});
+users.post('/:userId/trips/:tripId/events', (req, res, next) => {
+  const { name, location, startTime, activity } = req.body;
+  TripEvent.create({
+    name,
+    location,
+    startTime,
+    activity,
+    creatorId: req.params.userId,
+    tripId: req.params.tripId,
+  }).then((tripEvent) => {
+    res.status(201).send(tripEvent);
   });
 });
 module.exports = users;
