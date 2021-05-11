@@ -1,7 +1,6 @@
 const db = require('..');
 const { Model, DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
-
 class User extends Model {}
 
 User.init(
@@ -18,6 +17,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    admin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     hooks: {
@@ -32,5 +35,4 @@ User.init(
     modelName: 'user',
   }
 );
-
 module.exports = User;

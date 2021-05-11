@@ -1,3 +1,4 @@
+const { response } = require('express');
 const supertest = require('supertest');
 const app = require('../../../server/app');
 const db = require('../../../server/db');
@@ -8,7 +9,7 @@ const mockApp = supertest(app);
 const seed = require('../../../server/seed');
 
 describe('User router', () => {
-  let user, backUpUser, tripId, newUser, createdTrip;
+  let user, backUpUser, newUser, createdTrip;
   beforeAll(async () => {
     await seed();
     const response = await mockApp.get('/api/users/1');
@@ -226,7 +227,7 @@ describe('User router', () => {
       tripInfo = {
         name: 'Canoeing Trip',
         location: 'Poconos, Pennsylvannia',
-        startDate: '2021-09-6',
+        startDate: '2021-09-06',
         endDate: '2021-09-10',
       };
       response = await mockApp
@@ -264,6 +265,19 @@ describe('User router', () => {
       expect(newEvent1.tripId).not.toBe(newEvent2.tripId);
       expect(newEvent1.creatorId).toBe(user.id);
       expect(newEvent2.creatorId).toBe(user.id);
+    });
+    describe('POST /api/users/:userId/friends/:friendId', () => {
+      it('User can add friends', async () => {
+        const response = await mockApp.post(
+          `/api/users/${user.id}/friends/${backUpUser.id}`
+        );
+        const { body } = response;
+        let isFriend = false;
+        body.friends.forEach((friend) => {
+          if (friend.id === backUpUser.id) isFriend = true;
+        });
+        expect(isFriend).toBeTruthy();
+      });
     });
   });
 
