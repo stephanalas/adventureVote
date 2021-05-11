@@ -104,7 +104,11 @@ describe('User Model', () => {
     expect(friends.length).toBe(2);
   });
   it('User can have many trips', async () => {
-    const trips = await user1.getTrips();
+    const trips = await Trip.findAll({
+      where: {
+        creatorId: user1.id,
+      },
+    });
     expect(trips.length).toBe(2);
   });
   it('User can have many events', async () => {

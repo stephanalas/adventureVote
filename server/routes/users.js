@@ -68,4 +68,30 @@ users.put('/:id', (req, res, next) => {
     });
 });
 
+users.post('/:id/trips', (req, res, next) => {
+  const { name, location, startDate, endDate } = req.body;
+  Trip.create({
+    name,
+    location,
+    startDate,
+    endDate,
+    creatorId: req.params.id,
+  })
+    .then((trip) => {
+      res.send(trip).status(201);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+users.get('/:id/trips', (req, res, next) => {
+  Trip.findAll({
+    where: {
+      creatorId: req.params.id,
+    },
+  }).then((trips) => {
+    res.send(trips).status(200);
+  });
+});
 module.exports = users;

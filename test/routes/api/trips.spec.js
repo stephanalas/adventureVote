@@ -9,9 +9,11 @@ const seed = require('../../../server/seed');
 
 describe('Trips router', () => {
   beforeAll(async () => [await seed()]);
-  describe('GET /api/trips', async () => {
-    const response = await mockApp.get('/api/trips');
-    const trips = response.body;
-    expect(trips.length).toBeTruthy();
+  describe('GET /api/trips', () => {
+    it('returns all trips', async () => {
+      const response = await mockApp.get('/api/trips');
+      const trips = response.body;
+      expect(trips.length).toBeTruthy();
+    });
   });
 });

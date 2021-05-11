@@ -1,9 +1,4 @@
-const {
-  TripEvent,
-  User,
-  Trip,
-  Trip_Attendee,
-} = require('../../server/db/models');
+const { TripEvent, User, Trip, Attendee } = require('../../server/db/models');
 const db = require('../../server/db');
 describe('Trip Model', () => {
   let trip, user1, user2, event1, event2;
@@ -41,7 +36,7 @@ describe('Trip Model', () => {
       tripId: trip.id,
       userId: user1.id,
     });
-    // await Trip_Attendee.create({ attendeeId: user2.id, tripId: trip.id });
+    // await Attendee.create({ attendeeId: user2.id, tripId: trip.id });
   });
 
   it('has location', () => {

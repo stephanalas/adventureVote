@@ -1,11 +1,5 @@
 const db = require('./db');
-const {
-  User,
-  Trip,
-  TripEvent,
-  User_Friend,
-  Trip_Attendee,
-} = require('./db/models');
+const { User, Trip, TripEvent, User_Friend, Attendee } = require('./db/models');
 
 const seed = async () => {
   await db.sync({ force: true });
@@ -54,14 +48,14 @@ const seed = async () => {
       location: 'Las Vegas, Nevada',
       startDate: '2021-08-30',
       endDate: '2021-09-05',
-      userId: steph.id,
+      creatorId: steph.id,
     }),
     Trip.create({
       name: 'Camping',
       location: 'Rocky Mountains',
       startDate: '2021-09-15',
       endDate: '2021-09-19',
-      userId: john.id,
+      creatorId: john.id,
       activity: 'camping',
     }),
     Trip.create({
@@ -69,7 +63,7 @@ const seed = async () => {
       location: 'Miami, Florida',
       startDate: '2021-07-30',
       endDate: '2021-08-03',
-      userId: charrice.id,
+      creatorId: charrice.id,
       activity: 'vacation',
     }),
     Trip.create({
@@ -77,30 +71,30 @@ const seed = async () => {
       location: 'Poconos, Pennsylvannia',
       startDate: '2021-08-30',
       endDate: '2021-09-05',
-      userId: jane.id,
+      creatorId: jane.id,
       activity: 'wintersports',
     }),
   ]);
   await Promise.all([
-    Trip_Attendee.create({ tripId: vegas.id, attendeeId: steph.id }),
-    Trip_Attendee.create({ tripId: vegas.id, attendeeId: charrice.id }),
-    Trip_Attendee.create({ tripId: vegas.id, attendeeId: john.id }),
-    Trip_Attendee.create({ tripId: vegas.id, attendeeId: jane.id }),
-    Trip_Attendee.create({ tripId: rockyMountains.id, attendeeId: steph.id }),
-    Trip_Attendee.create({
+    Attendee.create({ tripId: vegas.id, attendeeId: steph.id }),
+    Attendee.create({ tripId: vegas.id, attendeeId: charrice.id }),
+    Attendee.create({ tripId: vegas.id, attendeeId: john.id }),
+    Attendee.create({ tripId: vegas.id, attendeeId: jane.id }),
+    Attendee.create({ tripId: rockyMountains.id, attendeeId: steph.id }),
+    Attendee.create({
       tripId: rockyMountains.id,
       attendeeId: charrice.id,
     }),
-    Trip_Attendee.create({ tripId: rockyMountains.id, attendeeId: john.id }),
-    Trip_Attendee.create({ tripId: rockyMountains.id, attendeeId: jane.id }),
-    Trip_Attendee.create({ tripId: miami.id, attendeeId: charrice.id }),
-    Trip_Attendee.create({ tripId: miami.id, attendeeId: steph.id }),
-    Trip_Attendee.create({ tripId: miami.id, attendeeId: john.id }),
-    Trip_Attendee.create({ tripId: miami.id, attendeeId: jane.id }),
-    Trip_Attendee.create({ tripId: poconos.id, attendeeId: steph.id }),
-    Trip_Attendee.create({ tripId: poconos.id, attendeeId: charrice.id }),
-    Trip_Attendee.create({ tripId: poconos.id, attendeeId: john.id }),
-    Trip_Attendee.create({ tripId: poconos.id, attendeeId: jane.id }),
+    Attendee.create({ tripId: rockyMountains.id, attendeeId: john.id }),
+    Attendee.create({ tripId: rockyMountains.id, attendeeId: jane.id }),
+    Attendee.create({ tripId: miami.id, attendeeId: charrice.id }),
+    Attendee.create({ tripId: miami.id, attendeeId: steph.id }),
+    Attendee.create({ tripId: miami.id, attendeeId: john.id }),
+    Attendee.create({ tripId: miami.id, attendeeId: jane.id }),
+    Attendee.create({ tripId: poconos.id, attendeeId: steph.id }),
+    Attendee.create({ tripId: poconos.id, attendeeId: charrice.id }),
+    Attendee.create({ tripId: poconos.id, attendeeId: john.id }),
+    Attendee.create({ tripId: poconos.id, attendeeId: jane.id }),
   ]);
 
   // creating events
@@ -123,7 +117,7 @@ const seed = async () => {
       location: 'vegas',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: vegas.id,
-      userId: steph.id,
+      creatorId: steph.id,
       activity: 'gambling',
     }),
     TripEvent.create({
@@ -131,7 +125,7 @@ const seed = async () => {
       location: 'vegas',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: vegas.id,
-      userId: steph.id,
+      creatorId: steph.id,
       activity: 'show',
     }),
     TripEvent.create({
@@ -139,7 +133,7 @@ const seed = async () => {
       location: 'vegas',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: vegas.id,
-      userId: steph.id,
+      creatorId: steph.id,
       activity: 'dinner',
     }),
     TripEvent.create({
@@ -147,7 +141,7 @@ const seed = async () => {
       location: 'Rocky Mountains',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: rockyMountains.id,
-      userId: john.id,
+      creatorId: john.id,
       activity: 'outdoor',
     }),
     TripEvent.create({
@@ -155,7 +149,7 @@ const seed = async () => {
       location: 'Rocky Mountains',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: rockyMountains.id,
-      userId: john.id,
+      creatorId: john.id,
       activity: 'outdoor',
     }),
     TripEvent.create({
@@ -163,7 +157,7 @@ const seed = async () => {
       location: 'Rocky Mountains',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: rockyMountains.id,
-      userId: john.id,
+      creatorId: john.id,
       activity: 'outdoor',
     }),
     TripEvent.create({
@@ -171,7 +165,7 @@ const seed = async () => {
       location: 'Miami, Florida',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: miami.id,
-      userId: charrice.id,
+      creatorId: charrice.id,
       activity: 'outdoor',
     }),
     TripEvent.create({
@@ -179,7 +173,7 @@ const seed = async () => {
       location: 'Miami, Florida',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: miami.id,
-      userId: charrice.id,
+      creatorId: charrice.id,
       activity: 'show',
     }),
     TripEvent.create({
@@ -187,7 +181,7 @@ const seed = async () => {
       location: 'Miami, Florida',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: miami.id,
-      userId: charrice.id,
+      creatorId: charrice.id,
       activity: 'club',
     }),
     TripEvent.create({
@@ -195,7 +189,7 @@ const seed = async () => {
       location: 'Poconos, Pennsylvannia',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: poconos.id,
-      userId: jane.id,
+      creatorId: jane.id,
       activity: 'wintersports',
     }),
     TripEvent.create({
@@ -203,7 +197,7 @@ const seed = async () => {
       location: 'Poconos, Pennsylvannia',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: poconos.id,
-      userId: jane.id,
+      creatorId: jane.id,
       activity: 'wintersports',
     }),
     TripEvent.create({
@@ -211,7 +205,7 @@ const seed = async () => {
       location: 'Poconos, Pennsylvannia',
       startTime: '2021-08-31 11:28:01.306-04',
       tripId: poconos.id,
-      userId: jane.id,
+      creatorId: jane.id,
       activity: 'wintersports',
     }),
   ]);

@@ -9,7 +9,7 @@ const seed = require('../../../server/seed');
 
 describe('User router', () => {
   let user, backUpUser;
-  beforeAll(async () => {
+  beforeEach(async () => {
     await seed();
     const response = await mockApp.get('/api/users/1');
     user = response.body;
@@ -57,7 +57,6 @@ describe('User router', () => {
   describe('PUT /users/:id', () => {
     it('updates user', async () => {
       const { username } = backUpUser;
-      console.log(username);
       const payload = {
         username: 'curvyjones',
         email: 'john@gmail.com',
@@ -75,11 +74,10 @@ describe('User router', () => {
   describe('POST /users/:id/trips', () => {
     it('user can create a trip', async () => {
       const tripInfo = {
-        name: 'Snowboarding trip',
+        name: 'Snowboarding Trip',
         location: 'Poconos, Pennsylvannia',
         startDate: '2021-08-30',
         endDate: '2021-09-05',
-        creatorId: backUpUser.id,
       };
       const response = await mockApp
         .post(`/api/users/${backUpUser.id}/trips`)
@@ -87,6 +85,7 @@ describe('User router', () => {
       const trip = response.body;
       expect(trip.name).toBe('Snowboarding Trip');
       expect(trip.creatorId).toBe(backUpUser.id);
+      expect(response.status).toBe(200);
     });
   });
   describe('GET /users/:id/trips/', () => {
@@ -112,6 +111,7 @@ describe('User router', () => {
       });
       expect(userTrips.length).toBeTruthy();
       expect(foundTrip).toBeTruthy();
+      expect(response.status).toBe(200);
     });
     // describe('PUT /api/users/:userId/trips/:tripId', () => {
     //   it('user can update their trip', () => {
