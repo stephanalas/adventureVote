@@ -157,32 +157,34 @@ users.post('/:userId/friends/:friendId', (req, res, next) => {
       userId: req.params.friendId,
       friendId: req.params.userId,
     },
-  }).then(async (friendship) => {
-    if (friendship) {
-      friendship.status = 'approved';
-      await friendship.save();
-      await User_Friend.create({
-        userId: req.params.userId,
-        friendId: req.params.friendId,
-        status: 'approved',
-      });
-    } else {
-      await User_Friend.create({
-        userId: req.params.userId,
-        friendId: req.params.friendId,
-        status: 'pending',
-      });
-    }
+  })
+    .then(async (friendship) => {
+      if (friendship) {
+        friendship.status = 'approved';
+        await friendship.save();
+        await User_Friend.create({
+          userId: req.params.userId,
+          friendId: req.params.friendId,
+          status: 'approved',
+        });
+      } else {
+        await User_Friend.create({
+          userId: req.params.userId,
+          friendId: req.params.friendId,
+          status: 'pending',
+        });
+      }
 
-    const updatedUser = await User.findOne({
-      where: { id: req.params.userId },
-      include: {
-        model: User,
-        as: 'friends',
-      },
-    });
-    res.status(200).send(updatedUser);
-  });
+      const updatedUser = await User.findOne({
+        where: { id: req.params.userId },
+        include: {
+          model: User,
+          as: 'friends',
+        },
+      });
+      res.status(200).send(updatedUser);
+    })
+    .catch((err) => console.log(err));
 });
 
 // .then((friendship) => {

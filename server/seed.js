@@ -32,18 +32,18 @@ const seed = async () => {
   ]);
   // creating friendships
   await Promise.all([
-    // User_Friend.create({ userId: steph.id, friendId: charrice.id }),
-    // User_Friend.create({ userId: steph.id, friendId: john.id }),
-    // User_Friend.create({ userId: steph.id, friendId: jane.id }),
-    // User_Friend.create({ userId: charrice.id, friendId: steph.id }),
-    // User_Friend.create({ userId: charrice.id, friendId: john.id }),
-    // User_Friend.create({ userId: charrice.id, friendId: jane.id }),
-    // User_Friend.create({ userId: john.id, friendId: steph.id }),
-    // User_Friend.create({ userId: john.id, friendId: charrice.id }),
-    // User_Friend.create({ userId: john.id, friendId: jane.id }),
-    // User_Friend.create({ userId: jane.id, friendId: steph.id }),
-    // User_Friend.create({ userId: jane.id, friendId: charrice.id }),
-    // User_Friend.create({ userId: jane.id, friendId: john.id }),
+    User_Friend.create({ userId: steph.id, friendId: charrice.id }),
+    User_Friend.create({ userId: steph.id, friendId: john.id }),
+    User_Friend.create({ userId: steph.id, friendId: jane.id }),
+    User_Friend.create({ userId: charrice.id, friendId: steph.id }),
+    User_Friend.create({ userId: charrice.id, friendId: john.id }),
+    User_Friend.create({ userId: charrice.id, friendId: jane.id }),
+    User_Friend.create({ userId: john.id, friendId: steph.id }),
+    User_Friend.create({ userId: john.id, friendId: charrice.id }),
+    User_Friend.create({ userId: john.id, friendId: jane.id }),
+    User_Friend.create({ userId: jane.id, friendId: steph.id }),
+    User_Friend.create({ userId: jane.id, friendId: charrice.id }),
+    User_Friend.create({ userId: jane.id, friendId: john.id }),
   ]);
   // Creating Trips
   const [vegas, rockyMountains, miami, poconos] = await Promise.all([

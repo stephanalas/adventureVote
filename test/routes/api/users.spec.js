@@ -2,7 +2,7 @@ const { response } = require('express');
 const supertest = require('supertest');
 const app = require('../../../server/app');
 const db = require('../../../server/db');
-const { User } = require('../../../server/db/models');
+const { User, User_Friend } = require('../../../server/db/models');
 
 const mockApp = supertest(app);
 
@@ -12,6 +12,7 @@ describe('User router', () => {
   let user, backUpUser, newUser, createdTrip;
   beforeAll(async () => {
     await seed();
+    await User_Friend.sync({ force: true });
     const response = await mockApp.get('/api/users/1');
     user = response.body;
     const response2 = await mockApp.get('/api/users/2');
@@ -258,8 +259,6 @@ describe('User router', () => {
         .send(event2Info);
       const newEvent1 = event1Response.body;
       const newEvent2 = event2Response.body;
-      // console.log('new event 1 ', event1Response);
-      // console.log('new event 2 ', event2Response);
       event1Info.name = 'sking';
 
       expect(newEvent1.tripId).not.toBe(newEvent2.tripId);
