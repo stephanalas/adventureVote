@@ -10,10 +10,5 @@ const useStyles = makeStyles({
 });
 export default () => {
   const classes = useStyles();
-  return (
-    <Container className={classes.root}>
-      {' '}
-      <LoginSucess></LoginSucess>
-    </Container>
-  );
+  return <Container className={classes.root}> </Container>;
 };

@@ -2,9 +2,6 @@ import React from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import MainLoginSignup from './MainLoginSignup';
 import Nav from './Nav';
-import Login from './Login';
-
-import SignUp from './SignUp';
 import UserMainView from './UserMainView';
 export default () => {
   return (

@@ -5,7 +5,7 @@ const db = require('..');
 const Attendee = require('./Attendee');
 const TripEvent = require('./TripEvent');
 const jwt = require('jsonwebtoken');
-
+const bcrypt = require('bcrypt');
 class User_Friend extends Model {}
 User_Friend.init(
   {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { connect } from 'react-redux';
+import createUser from '../store/actions/createUser';
 
 const useStyles = makeStyles((theme) => ({
   // this is where you can use css
@@ -26,24 +28,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+const SignUp = (props) => {
   const classes = useStyles();
-
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const onChange = (ev) => {
+    const { name } = ev.target;
+    if (name === 'username') setUsername(ev.target.value);
+    else if (name === 'email') setEmail(ev.target.value);
+    else setPassword(ev.target.value);
+  };
+  const onSubmit = (ev) => {
+    ev.preventDefault();
+    props.signUp({ username, email, password });
+    if (props.user.id) history.push('/home');
+  };
   return (
     <Container component="div" maxWidth="xs">
       <CssBaseline />
-      <form className={classes.form} noValidate>
+      <form className={classes.form} onSubmit={onSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
-              autoComplete="fname"
-              name="firstName"
+              autoComplete="username"
+              name="username"
               variant="outlined"
               required
               fullWidth
-              id="firstName"
-              label="First Name"
+              id="username"
+              label="Username"
               autoFocus
+              onChange={onChange}
             />
           </Grid>
 
@@ -56,6 +72,7 @@ export default function SignUp() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              onChange={onChange}
             />
           </Grid>
           <Grid item xs={12}>
@@ -68,6 +85,7 @@ export default function SignUp() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={onChange}
             />
           </Grid>
         </Grid>
@@ -83,4 +101,13 @@ export default function SignUp() {
       </form>
     </Container>
   );
-}
+};
+
+export default connect(
+  (state) => state,
+  (dispatch) => {
+    return {
+      signUp: (userInfo) => dispatch(createUser(userInfo)),
+    };
+  }
+)(SignUp);

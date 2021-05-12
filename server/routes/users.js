@@ -25,9 +25,21 @@ users.get('/', (req, res, next) => {
 
 users.post('/', (req, res, next) => {
   const { username, email, password } = req.body;
-  User.create({ username, email, password })
+  User.findOne({ where: { email } })
     .then((user) => {
-      res.status(201).send(user);
+      console.log(user);
+      if (user) {
+        res.status(403).json({ message: 'User already exists' });
+      }
+    })
+    .then(() => {
+      return User.create({ username, email, password });
+    })
+    .then((user) => {
+      return User.authenticate({ email, password });
+    })
+    .then((token) => {
+      res.status(201).send({ token });
     })
     .catch((err) => {
       next(err);
