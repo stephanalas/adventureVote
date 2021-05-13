@@ -2,25 +2,29 @@ const users = require('express').Router();
 const { User, Trip, TripEvent, User_Friend } = require('../db/models');
 const requireToken = require('../requireToken');
 
-users.get('/', (req, res, next) => {
-  User.findAll({
-    include: [
-      {
-        model: Trip,
-        include: [TripEvent],
-      },
-      {
-        model: User,
-        as: 'friends',
-      },
-    ],
-  })
-    .then((users) => {
-      res.status(200).send(users);
+users.get('/', requireToken, (req, res, next) => {
+  if (req.user) {
+    User.findAll({
+      include: [
+        {
+          model: Trip,
+          include: [TripEvent],
+        },
+        {
+          model: User,
+          as: 'friends',
+        },
+      ],
     })
-    .catch((err) => {
-      next(err);
-    });
+      .then((users) => {
+        res.status(200).send(users);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } else {
+    throw Error('you must login or sign up!');
+  }
 });
 
 users.post('/', (req, res, next) => {
@@ -45,28 +49,8 @@ users.post('/', (req, res, next) => {
       next(err);
     });
 });
-users.get('/:id', (req, res, next) => {
-  User.findOne({
-    where: {
-      id: req.params.id,
-    },
-    include: [
-      {
-        model: Trip,
-        include: [TripEvent],
-      },
-      {
-        model: User,
-        as: 'friends',
-      },
-    ],
-  })
-    .then((user) => {
-      res.status(200).send(user);
-    })
-    .catch((err) => {
-      next(err);
-    });
+users.get('/:id', requireToken, (req, res, next) => {
+  res.status(200).send(req.user);
 });
 
 users.delete('/:id', (req, res, next) => {
@@ -189,10 +173,16 @@ users.post('/:userId/friends/:friendId', (req, res, next) => {
 
       const updatedUser = await User.findOne({
         where: { id: req.params.userId },
-        include: {
-          model: User,
-          as: 'friends',
-        },
+        include: [
+          {
+            model: User,
+            as: 'friends',
+          },
+          {
+            model: Trip,
+            include: TripEvent,
+          },
+        ],
       });
       res.status(200).send(updatedUser);
     })

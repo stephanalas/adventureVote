@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FullWidthTabs() {
+export default function FullWidthTabs(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
@@ -110,10 +110,10 @@ export default function FullWidthTabs() {
           onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            <Login />
+            <Login history={props.history} />
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
-            <SignUp />
+            <SignUp history={props.history} />
           </TabPanel>
         </SwipeableViews>
       </Container>

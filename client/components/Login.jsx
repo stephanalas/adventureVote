@@ -39,7 +39,7 @@ const Login = (props) => {
   const onSubmit = (ev) => {
     ev.preventDefault();
     props.login({ email, password });
-    props.history.push('/home');
+    if (props.user) props.history.push('/home');
   };
   return (
     <Container component="section" maxWidth="xs">

@@ -42,7 +42,8 @@ const SignUp = (props) => {
   const onSubmit = (ev) => {
     ev.preventDefault();
     props.signUp({ username, email, password });
-    if (props.user.id) history.push('/home');
+    localStorage.setItem('userId', props.user.id);
+    if (props.user.id) props.history.push('/home');
   };
   return (
     <Container component="div" maxWidth="xs">

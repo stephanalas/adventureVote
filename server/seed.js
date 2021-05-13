@@ -4,11 +4,17 @@ const { User, Trip, TripEvent, User_Friend, Attendee } = require('./db/models');
 const seed = async () => {
   await db.sync({ force: true });
   // creating users
-  const [steph, charrice, john, jane] = await Promise.all([
+  const [steph, julio, charrice, john, jane] = await Promise.all([
     User.create({
       username: 'stephalas',
       password: '123',
       email: 'sa@gmail.com',
+      admin: true,
+    }),
+    User.create({
+      username: 'julio',
+      password: '123',
+      email: 'j@gmail.com',
       admin: true,
     }),
     User.create({
@@ -32,18 +38,56 @@ const seed = async () => {
   ]);
   // creating friendships
   await Promise.all([
-    User_Friend.create({ userId: steph.id, friendId: charrice.id }),
-    User_Friend.create({ userId: steph.id, friendId: john.id }),
-    User_Friend.create({ userId: steph.id, friendId: jane.id }),
-    User_Friend.create({ userId: charrice.id, friendId: steph.id }),
-    User_Friend.create({ userId: charrice.id, friendId: john.id }),
-    User_Friend.create({ userId: charrice.id, friendId: jane.id }),
-    User_Friend.create({ userId: john.id, friendId: steph.id }),
-    User_Friend.create({ userId: john.id, friendId: charrice.id }),
-    User_Friend.create({ userId: john.id, friendId: jane.id }),
-    User_Friend.create({ userId: jane.id, friendId: steph.id }),
-    User_Friend.create({ userId: jane.id, friendId: charrice.id }),
-    User_Friend.create({ userId: jane.id, friendId: john.id }),
+    User_Friend.create({
+      userId: steph.id,
+      friendId: charrice.id,
+      status: 'approved',
+    }),
+    User_Friend.create({
+      userId: steph.id,
+      friendId: john.id,
+      status: 'approved',
+    }),
+    User_Friend.create({
+      userId: steph.id,
+      friendId: jane.id,
+      status: 'pending',
+    }),
+    User_Friend.create({
+      userId: charrice.id,
+      friendId: steph.id,
+      status: 'approved',
+    }),
+    User_Friend.create({
+      userId: charrice.id,
+      friendId: jane.id,
+      status: 'approved',
+    }),
+    User_Friend.create({
+      userId: john.id,
+      friendId: steph.id,
+      status: 'approved',
+    }),
+    User_Friend.create({
+      userId: john.id,
+      friendId: charrice.id,
+      status: 'pending',
+    }),
+    User_Friend.create({
+      userId: john.id,
+      friendId: jane.id,
+      status: 'approved',
+    }),
+    User_Friend.create({
+      userId: jane.id,
+      friendId: charrice.id,
+      status: 'approved',
+    }),
+    User_Friend.create({
+      userId: jane.id,
+      friendId: john.id,
+      status: 'approved',
+    }),
   ]);
   // Creating Trips
   const [vegas, rockyMountains, miami, poconos] = await Promise.all([

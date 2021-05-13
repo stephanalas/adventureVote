@@ -26,13 +26,12 @@ const useStyles = makeStyles({
   },
 });
 
-const Nav = (props, otherProps) => {
+const Nav = (props) => {
   const classes = useStyles();
   const handleLogout = () => {
     props.logout();
     props.history.push('/');
   };
-  console.log(props);
   return (
     <AppBar position="static" className={classes.nav}>
       <div className={classes.logo}>Logo</div>
