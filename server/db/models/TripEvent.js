@@ -19,6 +19,10 @@ TripEvent.init(
     activity: {
       type: DataTypes.STRING,
     },
+    voteCount: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   },
   { sequelize: db, modelName: 'event' }
 );

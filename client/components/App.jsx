@@ -7,13 +7,16 @@ import UserMainView from './UserMainView';
 import getUser from '../store/actions/getUser';
 import getUsers from '../store/actions/getUsers';
 import MyFriends from './MyFriends';
-import TimePickers from './TimePickers';
+import CreateTrip from './CreateTrip';
+import TripCard from './TripCard';
+
 export default connect(
   (state) => state,
   (dispatch) => {
     return {
       getUser: () => dispatch(getUser()),
       getUsers: () => dispatch(getUsers()),
+      getTrips: () => dispatch(getTrips()),
     };
   }
 )((props) => {
@@ -25,13 +28,14 @@ export default connect(
     <HashRouter>
       <Route component={Nav} />
       <Switch>
+        <Route component={TripCard} path="/test" exact />
         {!props.user.id ? (
           <Route component={MainLoginSignup} path="/" exact />
         ) : null}
 
         {props.user.id ? <Route component={UserMainView} path="/home" /> : null}
-        <Route component={TimePickers} path="/test" exact />
-        <Route component={MyFriends} path="/users/:id/friends" exact />
+        <Route component={CreateTrip} path="/createTrip" exact />
+        <Route component={MyFriends} path="/friends" exact />
       </Switch>
     </HashRouter>
   );

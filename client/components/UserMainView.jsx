@@ -13,6 +13,10 @@ import {
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import getUser from '../store/actions/getUser';
+import CreateNewTripCard from './CreateNewTripCard';
+import HomeTabs from './HomeTabs';
+import TripCard from './TripCard';
+import getTrips from '../store/actions/getTrips';
 const useStyles = makeStyles({
   root: {
     width: '100%',
@@ -50,45 +54,32 @@ const useStyles = makeStyles({
     height: '100%',
   },
 });
-export default connect((state) => state)((props) => {
+export default connect(
+  (state) => state,
+  (dispatch) => {
+    return {
+      getTrips: (userId) => dispatch(getTrips(userId)),
+    };
+  }
+)((props) => {
   const classes = useStyles();
+  const trips = props.trips || [];
+  const redirectCreateTrip = () => {
+    props.history.push('/createTrip');
+  };
+  const handleFriendsClick = () => {
+    props.history.push('/friends');
+  };
+  if (localStorage.getItem('token') && !props.trips.length) {
+    props.getTrips(props.user.id);
+  }
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12} sm={3} className={classes.userNavigation}>
-        <Paper className={classes.paper}>
-          <Grid item className={classes.option}>
-            <Typography className={classes.typography}>
-              <Button className={classes.button}>Create A Trip</Button>
-            </Typography>
-          </Grid>
-          <Grid item className={classes.option}>
-            <Typography className={classes.typography}>
-              <Button
-                className={classes.button}
-                onClick={() =>
-                  props.history.push(`/users/${props.user.id}/friends`)
-                }
-              >
-                My friends
-              </Button>
-            </Typography>
-          </Grid>
-          <Grid item className={classes.option}>
-            <Typography className={classes.typography}>
-              <Button className={classes.button}>Past Trips</Button>
-            </Typography>
-          </Grid>
-          <Grid item className={classes.option}>
-            <Typography className={classes.typography}>
-              <Button className={classes.button}>Notifications</Button>
-            </Typography>
-          </Grid>
-          <Grid item className={classes.option}>
-            <Typography className={classes.typography}>
-              <Button className={classes.button}>Events</Button>
-            </Typography>
-          </Grid>
-        </Paper>
+        <HomeTabs
+          redirectCreateTrip={redirectCreateTrip}
+          handleFriendsClick={handleFriendsClick}
+        />
       </Grid>
       <Grid item xs={12} sm={2} className={classes.lineContainer}>
         <Divider orientation="vertical" />
@@ -96,16 +87,12 @@ export default connect((state) => state)((props) => {
       <Grid item xs={12} sm={6}>
         {/* flexbox the paper element */}
         <Paper className={classes.paper}>
-          <Card className={classes.card} raised>
-            <CardContent>
-              <Typography>Create a new Trip!</Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small" variant="contained">
-                create Trip
-              </Button>
-            </CardActions>
-          </Card>
+          <Typography>Current Trips</Typography>
+          {trips.length ? (
+            trips.map((trip) => <TripCard key={trip.id} trip={trip} />)
+          ) : (
+            <CreateNewTripCard redirectCreateTrip={redirectCreateTrip} />
+          )}
         </Paper>
       </Grid>
     </Grid>

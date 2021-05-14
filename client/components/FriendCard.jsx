@@ -36,20 +36,24 @@ const useStyles = makeStyles((theme) => ({
 const FriendCard = (props) => {
   const classes = useStyles();
   let pending, isFriend;
-  props.user.friends.forEach((friend) => {
-    if (
-      friend.id === props.friend.id &&
-      friend.User_Friend.status === 'approved'
-    ) {
-      isFriend = true;
-    } else if (
-      friend.id === props.friend.id &&
-      friend.User_Friend.status === 'pending'
-    ) {
-      pending = true;
-    }
-  });
-
+  console.log(props);
+  const friends = props.user.friends || [];
+  if (friends.length) {
+    // console.log(friends);
+    friends.forEach((friend) => {
+      if (
+        friend.id === props.friend.id &&
+        friend.User_Friend.status === 'approved'
+      ) {
+        isFriend = true;
+      } else if (
+        friend.id === props.friend.id &&
+        friend.User_Friend.status === 'pending'
+      ) {
+        pending = true;
+      }
+    });
+  }
   return (
     <Card className={classes.root} key={props.friend.id}>
       <div className={classes.details}>

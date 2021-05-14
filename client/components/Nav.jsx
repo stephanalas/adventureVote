@@ -34,7 +34,9 @@ const Nav = (props) => {
   };
   return (
     <AppBar position="static" className={classes.nav}>
-      <div className={classes.logo}>Logo</div>
+      <Link to="/home">
+        <div className={classes.logo}>Logo</div>
+      </Link>
       {props.user.id ? <Avatar src="none.jpg" /> : 'Welcome'}
       {props.user.id ? <Button onClick={handleLogout}>Sign Out</Button> : ''}
       <Link to="#" className={classes.link}>

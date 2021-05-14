@@ -8,15 +8,20 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-export default function TimePickers() {
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date('2014-08-18T21:11:54')
-  );
-  useEffect(() => {
-    console.log(selectedDate);
-  });
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+export default function TimePickers(props) {
+  const handleDepartureDateChange = (date) => {
+    const month = date.getMonth() + 1;
+    const day = date.getDay();
+    const year = date.getFullYear();
+    const formatDate = month + '/' + day + '/' + year;
+    props.setDepartureDate(formatDate);
+  };
+  const handleReturnDateChange = (date) => {
+    const month = date.getMonth() + 1;
+    const day = date.getDay();
+    const year = date.getFullYear();
+    const formatDate = month + '/' + day + '/' + year;
+    props.setReturnDate(formatDate);
   };
 
   return (
@@ -29,8 +34,8 @@ export default function TimePickers() {
           margin="normal"
           id="depature-date"
           label="Departure Date"
-          value={selectedDate}
-          onChange={handleDateChange}
+          // value={new Date()}
+          onChange={handleDepartureDateChange}
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}
@@ -40,8 +45,8 @@ export default function TimePickers() {
           id="return-date"
           label="Return Date"
           format="MM/dd/yyyy"
-          value={selectedDate}
-          onChange={handleDateChange}
+          // value={new Date()}
+          onChange={handleReturnDateChange}
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}

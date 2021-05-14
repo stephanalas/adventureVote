@@ -1,6 +1,14 @@
 const users = require('express').Router();
-const { User, Trip, TripEvent, User_Friend } = require('../db/models');
+const {
+  User,
+  Trip,
+  TripEvent,
+  User_Friend,
+  Attendee,
+} = require('../db/models');
 const requireToken = require('../requireToken');
+
+//gets all users
 
 users.get('/', requireToken, (req, res, next) => {
   if (req.user) {
@@ -27,6 +35,8 @@ users.get('/', requireToken, (req, res, next) => {
   }
 });
 
+// creates user
+
 users.post('/', (req, res, next) => {
   const { username, email, password } = req.body;
   User.findOne({ where: { email } })
@@ -49,9 +59,13 @@ users.post('/', (req, res, next) => {
       next(err);
     });
 });
+
+// get user by id (admin required)
 users.get('/:id', requireToken, (req, res, next) => {
   res.status(200).send(req.user);
 });
+
+// delete user
 
 users.delete('/:id', (req, res, next) => {
   User.findOne({
@@ -63,6 +77,8 @@ users.delete('/:id', (req, res, next) => {
     res.sendStatus(200);
   });
 });
+
+// update userinfo
 users.put('/:id', (req, res, next) => {
   const { username, email, password } = req.body;
   User.findByPk(req.params.id)
@@ -81,13 +97,15 @@ users.put('/:id', (req, res, next) => {
     });
 });
 
+// create trip for user
+
 users.post('/:id/trips', (req, res, next) => {
-  const { name, location, startDate, endDate } = req.body;
+  const { name, location, departureDate, returnDate } = req.body;
   Trip.create({
     name,
     location,
-    startDate,
-    endDate,
+    departureDate,
+    returnDate,
     creatorId: req.params.id,
   })
     .then((trip) => {
@@ -98,19 +116,64 @@ users.post('/:id/trips', (req, res, next) => {
     });
 });
 
-users.get('/:id/trips', (req, res, next) => {
-  Trip.findAll({
-    where: {
-      creatorId: req.params.id,
-    },
-  }).then((trips) => {
-    res.send(trips).status(200);
-  });
+// delete trip
+users.delete('/:userId/trips/:tripId', async (req, res, next) => {
+  try {
+    const trip = await Trip.findOne({
+      where: {
+        id: req.params.tripId,
+      },
+    });
+    if (trip.creatorId !== req.params.userId) {
+      throw Error('Unable to delete trip!');
+    }
+    trip.destroy();
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+  }
 });
-// users.get('/:userId/trips/:tripId', (req, res, next) => {});
+
+// get all users trips
+
+users.get('/:id/trips', async (req, res, next) => {
+  try {
+    const userCreatedTrips = await Trip.findAll({
+      where: {
+        creatorId: req.params.id,
+      },
+    });
+
+    const potentialTripsAttending = await Attendee.findAll({
+      where: {
+        attendeeId: req.params.id,
+        status: 'pending' || 'going',
+      },
+    });
+    console.log(potentialTripsAttending);
+    const invitedTrips = potentialTripsAttending.map(async (attendance) => {
+      // console.log(attendance);
+      const trip = await Trip.findOne({ where: { id: attendance.tripId } });
+      console.log(trip);
+      if (trip.creatorId !== attendance.attendeeId) return trip;
+    });
+    res.status(200).send(userCreatedTrips.concat(invitedTrips));
+  } catch (error) {
+    next(error);
+  }
+  //   Trip.findAll({
+  //     where: {
+  //       creatorId: req.params.id,
+  //     },
+  //   }).then((trips) => {
+  //     res.send(trips).status(200);
+  //   });
+  // });
+});
+// update user's trip
 
 users.put('/:userId/trips/:tripId', (req, res, next) => {
-  const { name, location, startDate, endDate } = req.body;
+  const { name, location, departureDate, returnDate } = req.body;
   Trip.findOne({
     where: {
       id: req.params.tripId,
@@ -119,20 +182,13 @@ users.put('/:userId/trips/:tripId', (req, res, next) => {
   }).then((trip) => {
     trip.name = name;
     trip.location = location;
-    trip.startDate = startDate;
-    trip.endDate = endDate;
+    trip.departureDate = departureDate;
+    trip.returnDate = returnDate;
     res.send(trip).status(200);
   });
 });
 
-users.put('/:userId/trips/:tripId/events/:eventId', (req, res, next) => {
-  TripEvent.findOne({
-    where: {
-      id: req.params.eventId,
-      tripId: req.params.tripId,
-    },
-  }).then();
-});
+// create event for user's trip
 users.post('/:userId/trips/:tripId/events', (req, res, next) => {
   const { name, location, startTime, activity } = req.body;
   TripEvent.create({
@@ -146,6 +202,18 @@ users.post('/:userId/trips/:tripId/events', (req, res, next) => {
     res.status(201).send(tripEvent);
   });
 });
+
+// update an event in user trip
+
+users.put('/:userId/trips/:tripId/events/:eventId', (req, res, next) => {
+  TripEvent.findOne({
+    where: {
+      id: req.params.eventId,
+      tripId: req.params.tripId,
+    },
+  }).then();
+});
+// handle friend relationships
 
 users.post('/:userId/friends/:friendId', (req, res, next) => {
   User_Friend.findOne({
@@ -189,11 +257,19 @@ users.post('/:userId/friends/:friendId', (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
-// .then((friendship) => {
-//   return User.findByPk(req.params.userId);
-// })
-// .then((user) => {
-//   res.status(200).send(user);
-// });
-
+users.post(
+  '/:userId/trips/:tripId/friends/:friendId',
+  async (req, res, next) => {
+    try {
+      const request = await Attendee.create({
+        tripId: req.params.tripId,
+        attendeeId: req.params.friendId,
+        status: 'pending',
+      });
+      res.status(201).send(request);
+    } catch (error) {
+      console.log('error with adding friend to trip');
+    }
+  }
+);
 module.exports = users;
