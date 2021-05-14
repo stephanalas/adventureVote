@@ -2,6 +2,7 @@ const { DataTypes, Model } = require('sequelize');
 const db = require('..');
 const Attendee = require('./Attendee');
 const faker = require('faker');
+const User = require('./User');
 class Trip extends Model {}
 
 Trip.init(
@@ -56,6 +57,18 @@ Trip.init(
           console.log('trip hook issue');
           console.log(error);
         }
+      },
+      afterCreate: async (trip) => {
+        const user = await User.findOne({
+          where: {
+            id: trip.creatorId,
+          },
+        });
+        await Attendee.create({
+          tripId: trip.id,
+          attendeeId: user.id,
+          status: 'going',
+        });
       },
     },
   }

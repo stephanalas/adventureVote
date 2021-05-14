@@ -14,9 +14,7 @@ Attendee.init(
     sequelize: db,
     modelName: 'Attendees',
     hooks: {
-      beforeCreate: (attendee) => {
-        console.log(attendee);
-      },
+      beforeCreate: (attendee) => {},
     },
   }
 );

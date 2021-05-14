@@ -124,7 +124,6 @@ const seed = async () => {
     }),
   ]);
   await Promise.all([
-    Attendee.create({ tripId: vegas.id, attendeeId: steph.id }),
     Attendee.create({ tripId: vegas.id, attendeeId: charrice.id }),
     Attendee.create({ tripId: vegas.id, attendeeId: john.id }),
     Attendee.create({ tripId: vegas.id, attendeeId: jane.id }),
@@ -133,16 +132,13 @@ const seed = async () => {
       tripId: rockyMountains.id,
       attendeeId: charrice.id,
     }),
-    Attendee.create({ tripId: rockyMountains.id, attendeeId: john.id }),
     Attendee.create({ tripId: rockyMountains.id, attendeeId: jane.id }),
-    Attendee.create({ tripId: miami.id, attendeeId: charrice.id }),
     Attendee.create({ tripId: miami.id, attendeeId: steph.id }),
     Attendee.create({ tripId: miami.id, attendeeId: john.id }),
     Attendee.create({ tripId: miami.id, attendeeId: jane.id }),
     Attendee.create({ tripId: poconos.id, attendeeId: steph.id }),
     Attendee.create({ tripId: poconos.id, attendeeId: charrice.id }),
     Attendee.create({ tripId: poconos.id, attendeeId: john.id }),
-    Attendee.create({ tripId: poconos.id, attendeeId: jane.id }),
   ]);
 
   // creating events

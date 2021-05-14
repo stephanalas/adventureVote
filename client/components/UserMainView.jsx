@@ -1,22 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Paper,
-  Grid,
-  Divider,
-  Typography,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-} from '@material-ui/core';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import getUser from '../store/actions/getUser';
-import CreateNewTripCard from './CreateNewTripCard';
+import { Paper, Grid, Divider, Typography } from '@material-ui/core';
+import { connect, useDispatch } from 'react-redux';
 import HomeTabs from './HomeTabs';
-import TripCard from './TripCard';
 import getTrips from '../store/actions/getTrips';
+import TripSection from './TripSection';
 const useStyles = makeStyles({
   root: {
     width: '100%',
@@ -29,6 +17,7 @@ const useStyles = makeStyles({
     marginTop: '3rem',
     marginLeft: '1rem',
     boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+    zIndex: '-4',
   },
   userNavigation: {
     width: '20%',
@@ -62,17 +51,25 @@ export default connect(
     };
   }
 )((props) => {
+  const dispatch = useDispatch();
   const classes = useStyles();
-  const trips = props.trips || [];
   const redirectCreateTrip = () => {
     props.history.push('/createTrip');
   };
   const handleFriendsClick = () => {
     props.history.push('/friends');
   };
-  if (localStorage.getItem('token') && !props.trips.length) {
-    props.getTrips(props.user.id);
-  }
+  // if (props.user.id && !props.trips.length) {
+  //   props.getTrips(props.user.id);
+  // }
+  const trips = props.user.trips || [];
+  const userTrips = trips.filter((trip) => trip.creatorId === props.user.id);
+  const invitedTrips = trips.filter((trip) => trip.creatorId !== props.user.id);
+  const now = new Date().getMonth();
+  const pastTrips = trips.filter((trip) =>
+    parseInt(trip.returnDate.slice(0, 2) < now)
+  );
+
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12} sm={3} className={classes.userNavigation}>
@@ -87,12 +84,15 @@ export default connect(
       <Grid item xs={12} sm={6}>
         {/* flexbox the paper element */}
         <Paper className={classes.paper}>
-          <Typography>Current Trips</Typography>
-          {trips.length ? (
+          <Typography>Trips</Typography>
+          <TripSection trips={userTrips} sectionName={'My Trips'} />
+          <TripSection trips={invitedTrips} sectionName={'Invited Trips'} />
+          <TripSection trips={pastTrips} sectionName={'Past Trips'} />
+          {/* {trips.length ? (
             trips.map((trip) => <TripCard key={trip.id} trip={trip} />)
           ) : (
             <CreateNewTripCard redirectCreateTrip={redirectCreateTrip} />
-          )}
+          )} */}
         </Paper>
       </Grid>
     </Grid>

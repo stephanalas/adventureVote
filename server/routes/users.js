@@ -1,4 +1,5 @@
 const users = require('express').Router();
+const { Op } = require('sequelize');
 const {
   User,
   Trip,
@@ -124,7 +125,9 @@ users.delete('/:userId/trips/:tripId', async (req, res, next) => {
         id: req.params.tripId,
       },
     });
-    if (trip.creatorId !== req.params.userId) {
+    console.log(typeof req.params.userId);
+    console.log(typeof trip.creatorId);
+    if (trip.creatorId !== parseInt(req.params.userId)) {
       throw Error('Unable to delete trip!');
     }
     trip.destroy();
@@ -136,28 +139,34 @@ users.delete('/:userId/trips/:tripId', async (req, res, next) => {
 
 // get all users trips
 
-users.get('/:id/trips', async (req, res, next) => {
+users.get('/:id/trips', requireToken, async (req, res, next) => {
   try {
     const userCreatedTrips = await Trip.findAll({
       where: {
-        creatorId: req.params.id,
+        creatorId: req.user.id,
       },
     });
-
     const potentialTripsAttending = await Attendee.findAll({
       where: {
-        attendeeId: req.params.id,
+        attendeeId: req.user.id,
         status: 'pending' || 'going',
       },
     });
-    console.log(potentialTripsAttending);
-    const invitedTrips = potentialTripsAttending.map(async (attendance) => {
-      // console.log(attendance);
-      const trip = await Trip.findOne({ where: { id: attendance.tripId } });
-      console.log(trip);
-      if (trip.creatorId !== attendance.attendeeId) return trip;
+    const tripIds = potentialTripsAttending.map((trip) => trip.tripId);
+    const returnOptions = (tripIds) => {
+      return tripIds.map((id) => {
+        return {
+          id,
+        };
+      });
+    };
+    const trips = await Trip.findAll({
+      where: {
+        [Op.or]: returnOptions(tripIds),
+      },
     });
-    res.status(200).send(userCreatedTrips.concat(invitedTrips));
+
+    res.status(200).send(trips.concat(userCreatedTrips));
   } catch (error) {
     next(error);
   }

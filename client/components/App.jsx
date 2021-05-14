@@ -8,8 +8,8 @@ import getUser from '../store/actions/getUser';
 import getUsers from '../store/actions/getUsers';
 import MyFriends from './MyFriends';
 import CreateTrip from './CreateTrip';
-import TripCard from './TripCard';
-
+import getTrips from '../store/actions/getTrips';
+import TripSection from './TripSection';
 export default connect(
   (state) => state,
   (dispatch) => {
@@ -24,11 +24,12 @@ export default connect(
     props.getUser();
     props.getUsers();
   }
+
   return (
     <HashRouter>
       <Route component={Nav} />
       <Switch>
-        <Route component={TripCard} path="/test" exact />
+        <Route component={TripSection} path="/test" exact />
         {!props.user.id ? (
           <Route component={MainLoginSignup} path="/" exact />
         ) : null}

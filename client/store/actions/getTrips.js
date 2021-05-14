@@ -1,4 +1,5 @@
 import axios from 'axios';
+import getToken from '../../utils/getToken';
 
 export const GET_TRIPS = 'GET_TRIPS';
 
@@ -10,7 +11,7 @@ const getTrips = (trips) => {
 };
 export default (userId) => async (dispatch) => {
   try {
-    const response = await axios.get(`/api/users/${userId}/trips`);
+    const response = await axios.get(`/api/users/${userId}/trips`, getToken());
     dispatch(getTrips(response.data));
   } catch (error) {
     console.log('error in getTrips thunk');

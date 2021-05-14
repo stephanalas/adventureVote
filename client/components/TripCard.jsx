@@ -51,13 +51,15 @@ export default connect(
         <Button size="small" color="primary">
           Edit Trip
         </Button>
-        <Button
-          onClick={() => props.deleteTrip(props.user.id, props.trip.id)}
-          size="small"
-          color="primary"
-        >
-          Delete Trip
-        </Button>
+        {props.trip.creatorId === props.user.id ? (
+          <Button
+            onClick={() => props.deleteTrip(props.user.id, props.trip.id)}
+            size="small"
+            color="primary"
+          >
+            Delete Trip
+          </Button>
+        ) : null}
       </CardActions>
     </Card>
   );
