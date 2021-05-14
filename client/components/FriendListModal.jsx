@@ -50,13 +50,16 @@ export default connect((state) => state)(function FriendListModal(props) {
     for (let attender in attendees) {
       if (attendees[attender]) attendeesList.push(attender);
     }
-    const newAttendeeList = props.user.friends.filter((friend) => {
+    const newAttendeeList = props.user.user.friends.filter((friend) => {
       if (attendeesList.includes(friend.username)) return friend;
     });
     props.setSelectedAttendees(newAttendeeList);
     setOpen(false);
   };
-  const friends = props.user.friends || [];
+  let friends;
+  if (props.user.user) {
+    friends = props.user.user.friends;
+  } else friends = [];
   return (
     <div>
       <Button onClick={handleOpen} variant="outlined">

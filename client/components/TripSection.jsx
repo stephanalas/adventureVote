@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -31,12 +31,21 @@ export default connect(
 )(function TripSection(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [t, setT] = useState([]);
   const sectionName = props.sectionName || '';
   const handleClick = () => {
     setOpen(!open);
   };
+  console.log(props, 'from trip section');
+  if (!props.user.user) {
+    // props.getTrips();
+  }
+  useEffect(() => {
+    if (props.user.user) {
+      setT(props.user.trips);
+    }
+  });
 
-  console.log(props, 'tripsection');
   let trips;
   if (props.user.user) {
     trips = props.user.user.trips;

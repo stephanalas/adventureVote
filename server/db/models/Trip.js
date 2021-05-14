@@ -12,7 +12,6 @@ Trip.init(
     },
     location: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     departureDate: {
       type: DataTypes.STRING,
@@ -24,7 +23,6 @@ Trip.init(
     },
     photo: {
       type: DataTypes.STRING,
-      allowNull: true,
     },
   },
   {
@@ -39,11 +37,11 @@ Trip.init(
             });
             trip.name = `Trip ${trips.length + 1}`;
           }
-          if (!trip.location.length) throw Error('location is required');
+          // if (!trip.location.length) throw Error('location is required');
           if (!trip.departureDate.length || !trip.returnDate.length) {
             const newDate = new Date();
             const month = newDate.getMonth() + 1;
-            const day = newDate.getDay();
+            const day = newDate.getDate();
             const year = newDate.getFullYear();
             const formatDate = month + '/' + day + '/' + year;
             trip.departureDate.length

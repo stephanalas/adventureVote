@@ -27,7 +27,7 @@ const MyFriends = (props) => {
   const [users, setUsers] = useState([]);
   const onChange = (ev) => {
     if (!ev.length) {
-      setUsers(props.user.friends);
+      setUsers(props.user.user.friends);
     }
     setSearchValue(ev);
     const potentialFriends = props.users.filter((user) =>
@@ -35,7 +35,9 @@ const MyFriends = (props) => {
     );
     setUsers(potentialFriends);
   };
-  const friends = props.user.friends || [];
+  let friends;
+  if (props.user.user) friends = props.user.user.friends;
+  else friends = [];
   return (
     <Grid container className={classes.root}>
       {' '}

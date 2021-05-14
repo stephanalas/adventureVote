@@ -20,6 +20,7 @@ const CreateTrip = (props) => {
   const [returnDate, setReturnDate] = useState('');
   const [tripName, setTripName] = useState('');
   const [location, setLocation] = useState('');
+  console.log(returnDate);
   const tripNameInput = (ev) => {
     setTripName(ev.target.value);
   };
@@ -29,7 +30,7 @@ const CreateTrip = (props) => {
   const handleClick = () => {
     const newDate = new Date();
     const month = newDate.getMonth() + 1;
-    const day = newDate.getDay();
+    const day = newDate.getDate();
     const year = newDate.getFullYear();
     const formatDate = month + '/' + day + '/' + year;
     const payload = {
@@ -46,9 +47,10 @@ const CreateTrip = (props) => {
       payload['departureDate'] = formatDate;
       payload['returnDate'] = formatDate;
     }
-    props.createTrip(props.user.id, payload, selectedAttendees);
+    props.createTrip(props.user.user.id, payload, selectedAttendees);
     props.history.push('/home');
   };
+  useEffect(() => console.log(departureDate));
   return (
     <Grid className={classes.root}>
       <TextField
@@ -70,6 +72,8 @@ const CreateTrip = (props) => {
       <TimePickers
         setReturnDate={setReturnDate}
         setDepartureDate={setDepartureDate}
+        departureDate={departureDate}
+        returnDate={returnDate}
       />
       <FriendListModal
         selectedAttendees={selectedAttendees}

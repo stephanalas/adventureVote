@@ -30,9 +30,6 @@ const useStyles = makeStyles({
   option: {
     backgroundColor: 'white',
     height: '4rem',
-    // display: 'flex',
-    // justifyContent: 'center',
-    // alignItems: 'center',
     margin: '0',
   },
   button: {
@@ -59,16 +56,6 @@ export default connect(
   const handleFriendsClick = () => {
     props.history.push('/friends');
   };
-
-  // if (props.user.user.id && !props.trips.length) {
-  //   props.getTrips(props.user.id);
-  // }
-  // useEffect(() => {
-  //   if (props.user.user) props.getTrips(props.user.user.id);
-  // });
-  // if (props.user.user) {
-  //   props.getTrips(props.user.user.id);
-  // }
   let trips;
   if (props.user.user) trips = props.user.user.trips;
   else trips = [];

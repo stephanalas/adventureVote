@@ -35,9 +35,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 const FriendCard = (props) => {
   const classes = useStyles();
-  let pending, isFriend;
-  console.log(props);
-  const friends = props.user.friends || [];
+  let pending, isFriend, friends;
+  if (props.user.user) friends = props.user.user.friends;
+  else friends = [];
   if (friends.length) {
     // console.log(friends);
     friends.forEach((friend) => {
@@ -66,7 +66,9 @@ const FriendCard = (props) => {
           {pending ? <Typography>Pending</Typography> : null}
           {!isFriend && !pending ? (
             <Button
-              onClick={() => props.addFriend(props.user.id, props.friend.id)}
+              onClick={() =>
+                props.addFriend(props.user.user.id, props.friend.id)
+              }
             >
               Add Friend
             </Button>

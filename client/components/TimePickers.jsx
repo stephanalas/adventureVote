@@ -10,42 +10,48 @@ import {
 
 export default function TimePickers(props) {
   const handleDepartureDateChange = (date) => {
+    console.log(date);
     const month = date.getMonth() + 1;
-    const day = date.getDay();
+    const day = date.getDate();
     const year = date.getFullYear();
     const formatDate = month + '/' + day + '/' + year;
     props.setDepartureDate(formatDate);
+    console.log('dates should be saved in state');
   };
   const handleReturnDateChange = (date) => {
     const month = date.getMonth() + 1;
-    const day = date.getDay();
+    const day = date.getDate();
     const year = date.getFullYear();
     const formatDate = month + '/' + day + '/' + year;
     props.setReturnDate(formatDate);
+    console.log('dates should be saved in state');
   };
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container justify="space-around">
         <KeyboardDatePicker
-          disableToolbar
+          inputValue={props.departureDate}
+          disablePast
+          autoOk
           variant="inline"
           format="MM/dd/yyyy"
           margin="normal"
           id="depature-date"
           label="Departure Date"
-          // value={new Date()}
           onChange={handleDepartureDateChange}
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}
         />
         <KeyboardDatePicker
+          inputValue={props.returnDate}
+          autoOk
           margin="normal"
+          variant="inline"
           id="return-date"
           label="Return Date"
           format="MM/dd/yyyy"
-          // value={new Date()}
           onChange={handleReturnDateChange}
           KeyboardButtonProps={{
             'aria-label': 'change date',

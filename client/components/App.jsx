@@ -8,9 +8,7 @@ import getUser from '../store/actions/getUser';
 import getUsers from '../store/actions/getUsers';
 import MyFriends from './MyFriends';
 import CreateTrip from './CreateTrip';
-import getTrips from '../store/actions/getTrips';
-import TripSection from './TripSection';
-import getNotifications from '../store/actions/getNotifications';
+import NotificationModal from './NotificationModal';
 export default connect(
   (state) => state,
   (dispatch) => {
@@ -29,7 +27,7 @@ export default connect(
     <HashRouter>
       <Route component={Nav} />
       <Switch>
-        <Route component={TripSection} path="/test" exact />
+        <Route component={NotificationModal} path="/test" exact />
         {id ? <Route component={MainLoginSignup} path="/" exact /> : null}
 
         {id ? <Route component={UserMainView} path="/home" /> : null}
