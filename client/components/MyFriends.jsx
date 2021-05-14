@@ -26,7 +26,6 @@ const MyFriends = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const [users, setUsers] = useState([]);
   const onChange = (ev) => {
-    console.log('something happened');
     if (!ev.length) {
       setUsers(props.user.friends);
     }

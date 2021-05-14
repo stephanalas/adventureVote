@@ -35,7 +35,6 @@ Trip.belongsToMany(User, {
 });
 Trip.hasMany(Attendee);
 // Attendee.belongsTo(Trip);
-
 User.belongsToMany(User, { through: User_Friend, as: 'friends' });
 User.belongsToMany(User, {
   through: User_Friend,

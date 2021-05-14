@@ -5,6 +5,7 @@ import { connect, useDispatch } from 'react-redux';
 import HomeTabs from './HomeTabs';
 import getTrips from '../store/actions/getTrips';
 import TripSection from './TripSection';
+import getNotifications from '../store/actions/getNotifications';
 const useStyles = makeStyles({
   root: {
     width: '100%',
@@ -51,7 +52,6 @@ export default connect(
     };
   }
 )((props) => {
-  const dispatch = useDispatch();
   const classes = useStyles();
   const redirectCreateTrip = () => {
     props.history.push('/createTrip');
@@ -59,17 +59,19 @@ export default connect(
   const handleFriendsClick = () => {
     props.history.push('/friends');
   };
-  // if (props.user.id && !props.trips.length) {
+
+  // if (props.user.user.id && !props.trips.length) {
   //   props.getTrips(props.user.id);
   // }
-  const trips = props.user.trips || [];
-  const userTrips = trips.filter((trip) => trip.creatorId === props.user.id);
-  const invitedTrips = trips.filter((trip) => trip.creatorId !== props.user.id);
-  const now = new Date().getMonth();
-  const pastTrips = trips.filter((trip) =>
-    parseInt(trip.returnDate.slice(0, 2) < now)
-  );
-
+  // useEffect(() => {
+  //   if (props.user.user) props.getTrips(props.user.user.id);
+  // });
+  // if (props.user.user) {
+  //   props.getTrips(props.user.user.id);
+  // }
+  let trips;
+  if (props.user.user) trips = props.user.user.trips;
+  else trips = [];
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12} sm={3} className={classes.userNavigation}>
@@ -85,9 +87,9 @@ export default connect(
         {/* flexbox the paper element */}
         <Paper className={classes.paper}>
           <Typography>Trips</Typography>
-          <TripSection trips={userTrips} sectionName={'My Trips'} />
-          <TripSection trips={invitedTrips} sectionName={'Invited Trips'} />
-          <TripSection trips={pastTrips} sectionName={'Past Trips'} />
+          <TripSection trips={trips} sectionName={'My Trips'} />
+          <TripSection trips={trips} sectionName={'Invited Trips'} />
+          <TripSection trips={trips} sectionName={'Past Trips'} />
           {/* {trips.length ? (
             trips.map((trip) => <TripCard key={trip.id} trip={trip} />)
           ) : (

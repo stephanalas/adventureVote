@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { User } = require('../db/models');
+const { User, Attendee, User_Friend } = require('../db/models');
 const requireToken = require('../requireToken');
 
 const login = express.Router();
@@ -27,10 +27,33 @@ login.post('/auth', async (req, res, next) => {
 });
 
 login.get('/auth', requireToken, async (req, res, next) => {
+  // try {
+  //   res.send(req.user);
+  // } catch (ex) {
+  //   next(ex);
+  // }
   try {
-    res.send(req.user);
-  } catch (ex) {
-    next(ex);
+    if (req.user.id) {
+      const userId = req.user.id;
+      const tripInvites = await Attendee.findAll({
+        where: {
+          attendeeId: userId,
+          status: 'pending',
+        },
+      });
+      const friendRequests = await User_Friend.findAll({
+        where: {
+          friendId: userId,
+          status: 'pending',
+        },
+      });
+
+      const notifications = { tripInvites, friendRequests };
+      notifications;
+      res.status(200).send({ user: req.user, notifications });
+    }
+  } catch (error) {
+    next(error);
   }
 });
 

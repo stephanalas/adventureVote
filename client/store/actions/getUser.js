@@ -16,6 +16,7 @@ export default () => async (dispatch) => {
       throw 'User not logged in';
     } else {
       delete authenticatedUser.data.password;
+      console.log(authenticatedUser.data);
       dispatch(_getUser(authenticatedUser.data));
     }
   } catch (err) {

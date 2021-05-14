@@ -62,8 +62,8 @@ users.post('/', (req, res, next) => {
 });
 
 // get user by id (admin required)
-users.get('/:id', requireToken, (req, res, next) => {
-  res.status(200).send(req.user);
+users.get('/:id', requireToken, async (req, res, next) => {
+  res.send(req.user);
 });
 
 // delete user
@@ -281,4 +281,27 @@ users.post(
     }
   }
 );
+users.get('/:userId/notifications', async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const tripInvites = await Attendee.findAll({
+      where: {
+        attendeeId: userId,
+        status: 'pending',
+      },
+    });
+    console.log(tripInvites);
+    const friendRequests = await User_Friend.findAll({
+      where: {
+        friendId: userId,
+        status: 'pending',
+      },
+    });
+
+    const notifications = { tripInvites, friendRequests };
+    res.status(200).send(notifications);
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = users;

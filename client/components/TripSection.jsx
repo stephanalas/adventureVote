@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -8,6 +8,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import AttendeeCard from './AttendeeCard';
 import TripLineItem from './TripLineItem';
 import { makeStyles } from '@material-ui/core';
+import { connect } from 'react-redux';
+import getTrips from '../store/actions/getTrips';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -19,15 +21,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TripSection(props) {
+export default connect(
+  (state) => state,
+  (dispatch) => {
+    return {
+      getTrips: (userId) => dispatch(getTrips(userId)),
+    };
+  }
+)(function TripSection(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const sectionName = props.sectionName || '';
   const handleClick = () => {
     setOpen(!open);
   };
-  console.log('tripscetion', props);
-  const trips = props.trips || [];
+
+  console.log(props, 'tripsection');
+  let trips;
+  if (props.user.user) {
+    trips = props.user.user.trips;
+  } else trips = [];
+  if (props.sectionName === 'Past Trips') {
+    const now = new Date().getMonth();
+    trips = trips.filter((trip) => parseInt(trip.returnDate.slice(0, 2) < now));
+  }
+  if (props.sectionName === 'My Trips') {
+    trips = trips.filter((trip) => trip.creatorId === props.user.user.id);
+  }
+  if (props.sectionName === 'Invited Trips') {
+    trips = trips.filter((trip) => trip.creatorId !== props.user.user.id);
+  }
   return (
     <List
       component="div"
@@ -51,4 +74,4 @@ export default function TripSection(props) {
       </Collapse>
     </List>
   );
-}
+});
