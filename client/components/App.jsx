@@ -8,8 +8,6 @@ import getUser from '../store/actions/getUser';
 import getUsers from '../store/actions/getUsers';
 import MyFriends from './MyFriends';
 import CreateTrip from './CreateTrip';
-import NotificationModal from './NotificationModal';
-import CreateEvent from './CreateEvent';
 import UpdateTrip from './updateTrip';
 import CreateEventModal from './CreateEventModal';
 export default connect(

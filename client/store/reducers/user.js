@@ -7,6 +7,8 @@ import { CREATE_TRIP } from '../actions/createTrip';
 import { CREATE_EVENT } from '../actions/createEvent';
 import { DELETE_TRIP } from '../actions/deleteTrip';
 import { UPDATE_TRIP } from '../actions/updateTrip';
+import { ADD_VOTE } from '../actions/addVote';
+import { REMOVE_VOTE } from '../actions/removeVote';
 export default (state = {}, action) => {
   if (
     action.type === CREATE_USER ||
@@ -16,7 +18,9 @@ export default (state = {}, action) => {
     action.type === CREATE_TRIP ||
     action.type === CREATE_EVENT ||
     action.type === DELETE_TRIP ||
-    action.type === UPDATE_TRIP
+    action.type === UPDATE_TRIP ||
+    action.type === ADD_VOTE ||
+    action.type === REMOVE_VOTE
   ) {
     return action.user;
   }

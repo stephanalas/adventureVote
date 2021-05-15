@@ -15,6 +15,9 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     margin: '5px',
   },
+  divider: {
+    display: 'flex',
+  },
 }));
 const UpdateTrip = (props) => {
   const [trip, setTrip] = useState({});
@@ -24,16 +27,20 @@ const UpdateTrip = (props) => {
   const [returnDate, setReturnDate] = useState('');
   const [tripName, setTripName] = useState('');
   const [location, setLocation] = useState('');
-  useEffect(() => {
-    if (!trip.id) {
-      getTrip(props.match.params.tripId);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!trip.id) {
+  //     getTrip(props.match.params.tripId);
+  //   }
+  // }, []);
   const getTrip = async (id) => {
     try {
       const response = await axios.get(`/api/trips/${id}}`);
       setTrip(response.data);
       // setSelectedAttendees(response.data.Attendees);
+      console.log(
+        'this is in new trip is should have data for votes',
+        response.data
+      );
     } catch (error) {
       console.log(error);
     }
@@ -116,8 +123,13 @@ const UpdateTrip = (props) => {
           setSelectedAttendees={setSelectedAttendees}
         />
         <CreateEventModal trip={newTrip} />
-        <EventList trip={newTrip} />
-        <Attendees attendees={selectedAttendees} update={true} />
+        <div className={classes.divider}>
+          <EventList trip={newTrip} />
+          <Attendees
+            attendees={newTrip.attendees.concat(selectedAttendees)}
+            update={true}
+          />
+        </div>
         <Button onClick={() => handleClick(user.id, newTrip.id)}>
           Update Trip
         </Button>

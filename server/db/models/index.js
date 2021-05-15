@@ -16,10 +16,32 @@ User_Friend.init(
   { sequelize: db }
 );
 
+class Vote extends Model {}
+Vote.init(
+  {},
+  {
+    sequelize: db,
+    modelName: 'votes',
+    hooks: {
+      afterCreate: async (vote) => {
+        try {
+          const event = await TripEvent.findByPk(vote.eventId);
+          event.voteCount = event.voteCount + 1;
+          console.log(event.voteCount);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    },
+  }
+);
+
 Trip.belongsTo(User, { as: 'creator' });
 // User.hasMany(Trip);
 Trip.hasMany(TripEvent);
-
+Vote.belongsTo(User, { as: 'voter' });
+// User.hasMany(Vote);
+TripEvent.hasMany(Vote);
 TripEvent.belongsTo(Trip);
 TripEvent.belongsTo(User, { as: 'creator' });
 
@@ -29,6 +51,7 @@ User.belongsToMany(Trip, {
     name: 'attendeeId',
   },
 });
+
 Trip.belongsToMany(User, {
   through: Attendee,
   as: 'attendees',
@@ -59,6 +82,7 @@ User.byToken = async (token) => {
           include: [
             {
               model: TripEvent,
+              include: Vote,
             },
             {
               model: User,
@@ -100,4 +124,4 @@ User.authenticate = async ({ email, password }) => {
   return 'invalid password';
 };
 
-module.exports = { User, Trip, TripEvent, User_Friend, Attendee };
+module.exports = { User, Trip, TripEvent, User_Friend, Attendee, Vote };

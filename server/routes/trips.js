@@ -1,11 +1,12 @@
 const trips = require('express').Router();
-const { User, Trip, TripEvent, Attendee } = require('../db/models');
+const { User, Trip, TripEvent, Attendee, Vote } = require('../db/models');
 
 trips.get('/', (req, res, next) => {
   Trip.findAll({
     include: [
       {
         model: TripEvent,
+        include: Vote,
       },
       {
         model: User,
@@ -26,6 +27,7 @@ trips.get('/:tripId', (req, res, next) => {
     include: [
       {
         model: TripEvent,
+        include: Vote,
       },
       {
         model: User,

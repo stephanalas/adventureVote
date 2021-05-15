@@ -12,8 +12,7 @@ import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
-    maxWidth: 360,
+    width: '50%',
     backgroundColor: theme.palette.background.paper,
   },
   nested: {

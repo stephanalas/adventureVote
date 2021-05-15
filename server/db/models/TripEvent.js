@@ -31,7 +31,15 @@ TripEvent.init(
       allowNull: true,
     },
   },
-  { sequelize: db, modelName: 'event' }
+  {
+    sequelize: db,
+    modelName: 'event',
+    hooks: {
+      beforeCreate: (event) => {
+        event.voteCount = 0;
+      },
+    },
+  }
 );
 
 module.exports = TripEvent;

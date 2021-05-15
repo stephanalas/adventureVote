@@ -4,9 +4,6 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import { Button, Paper, Typography } from '@material-ui/core';
-import PeopleIcon from '@material-ui/icons/People';
-import List from '@material-ui/core/List';
-import FriendLineItem from './FriendLineItem';
 import { connect } from 'react-redux';
 import CreateEvent from './CreateEvent';
 

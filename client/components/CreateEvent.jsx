@@ -1,10 +1,7 @@
 import { Button, Grid, makeStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import TimePickers from './TimePickers';
 import { connect } from 'react-redux';
 import { TextField } from '@material-ui/core';
-import FriendListModal from './FriendListModal';
-import Attendees from './Attendees';
 
 import createEvent from '../store/actions/createEvent';
 import EventTimePickers from './EventTimePickers';

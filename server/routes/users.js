@@ -6,6 +6,7 @@ const {
   TripEvent,
   User_Friend,
   Attendee,
+  Vote,
 } = require('../db/models');
 const requireToken = require('../requireToken');
 
@@ -17,7 +18,12 @@ users.get('/', requireToken, (req, res, next) => {
       include: [
         {
           model: Trip,
-          include: [TripEvent],
+          include: [
+            {
+              model: TripEvent,
+              include: Vote,
+            },
+          ],
         },
         {
           model: User,
@@ -146,6 +152,7 @@ users.get('/:id/trips', requireToken, async (req, res, next) => {
       include: [
         {
           model: TripEvent,
+          include: Vote,
         },
         {
           model: User,
@@ -204,6 +211,7 @@ users.put('/:userId/trips/:tripId', (req, res, next) => {
     include: [
       {
         model: TripEvent,
+        include: Vote,
       },
       {
         model: User,
@@ -281,14 +289,14 @@ users.post('/:userId/trips/:tripId/events', (req, res, next) => {
 
 // update an event in user trip
 
-users.put('/:userId/trips/:tripId/events/:eventId', (req, res, next) => {
-  TripEvent.findOne({
-    where: {
-      id: req.params.eventId,
-      tripId: req.params.tripId,
-    },
-  }).then();
-});
+// users.put('/:userId/trips/:tripId/events/:eventId', (req, res, next) => {
+//   TripEvent.findOne({
+//     where: {
+//       id: req.params.eventId,
+//       tripId: req.params.tripId,
+//     },
+//   }).then();
+// });
 // handle friend relationships
 
 users.post('/:userId/friends/:friendId', (req, res, next) => {
@@ -324,7 +332,12 @@ users.post('/:userId/friends/:friendId', (req, res, next) => {
           },
           {
             model: Trip,
-            include: TripEvent,
+            include: [
+              {
+                model: TripEvent,
+                include: Vote,
+              },
+            ],
           },
         ],
       });
@@ -367,6 +380,81 @@ users.get('/:userId/notifications', async (req, res, next) => {
 
     const notifications = { tripInvites, friendRequests };
     res.status(200).send(notifications);
+  } catch (error) {
+    next(error);
+  }
+});
+
+users.delete(
+  '/:userId/trips/:tripId/events/:eventId/vote',
+  async (req, res, next) => {
+    try {
+      const vote = await Vote.findOne({
+        where: {
+          eventId: req.params.eventId,
+          voterId: req.params.userId,
+        },
+      });
+      if (vote.voterId) {
+        await vote.destroy();
+        const updatedTrip = await Trip.findOne({
+          where: { id: req.params.tripId },
+          include: [
+            {
+              model: TripEvent,
+              include: Vote,
+            },
+            {
+              model: User,
+              as: 'creator',
+            },
+            {
+              model: User,
+              through: Attendee,
+              as: 'attendees',
+            },
+          ],
+        });
+        res.send(updatedTrip);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+users.post('/:userId/trips/:tripId/events/:eventId', async (req, res, next) => {
+  try {
+    const votes = await Vote.findAll({
+      where: {
+        eventId: req.params.eventId,
+        voterId: req.params.userId,
+      },
+    });
+    if (!votes.length) {
+      await Vote.create({
+        eventId: req.params.eventId,
+        voterId: req.params.userId,
+      });
+      const updatedTrip = await Trip.findOne({
+        where: { id: req.params.tripId },
+        include: [
+          {
+            model: TripEvent,
+            include: Vote,
+          },
+          {
+            model: User,
+            as: 'creator',
+          },
+          {
+            model: User,
+            through: Attendee,
+            as: 'attendees',
+          },
+        ],
+      });
+      res.send(updatedTrip);
+    }
   } catch (error) {
     next(error);
   }
