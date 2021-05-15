@@ -26,37 +26,83 @@ export default function TimePickers(props) {
     props.setReturnDate(formatDate);
     console.log('dates should be saved in state');
   };
+  function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
 
+  const handleStartTimeChange = (time) => {
+    props.setStartTime(formatAMPM(time));
+  };
+  const handleEndTimeChange = (time) => {
+    props.setEndTime(formatAMPM(time));
+  };
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container justify="space-around">
-        <KeyboardDatePicker
-          inputValue={props.departureDate}
-          disablePast
-          autoOk
-          variant="inline"
-          format="MM/dd/yyyy"
-          margin="normal"
-          id="depature-date"
-          label="Departure Date"
-          onChange={handleDepartureDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-        <KeyboardDatePicker
-          inputValue={props.returnDate}
-          autoOk
-          margin="normal"
-          variant="inline"
-          id="return-date"
-          label="Return Date"
-          format="MM/dd/yyyy"
-          onChange={handleReturnDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
+        <Grid item>
+          <KeyboardDatePicker
+            inputValue={props.departureDate}
+            disablePast
+            autoOk
+            variant="inline"
+            format="MM/dd/yyyy"
+            margin="normal"
+            id="depature-date"
+            label="Departure Date"
+            onChange={handleDepartureDateChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+          <KeyboardDatePicker
+            inputValue={props.returnDate}
+            autoOk
+            margin="normal"
+            variant="inline"
+            id="return-date"
+            label="Return Date"
+            format="MM/dd/yyyy"
+            onChange={handleReturnDateChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+        </Grid>
+        <Grid item>
+          {props.event ? (
+            <KeyboardTimePicker
+              margin="normal"
+              id="start-time-picker"
+              label="Start Time"
+              autoOk
+              inputValue={props.startTime}
+              onChange={handleStartTimeChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change time',
+              }}
+            />
+          ) : null}
+          {props.event ? (
+            <KeyboardTimePicker
+              autoOk
+              margin="normal"
+              id="end-time-picker"
+              label="End Time"
+              inputValue={props.endTime}
+              onChange={handleEndTimeChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change time',
+              }}
+            />
+          ) : null}
+        </Grid>
       </Grid>
     </MuiPickersUtilsProvider>
   );

@@ -11,12 +11,10 @@ export const _getUser = (user) => ({
 export default () => async (dispatch) => {
   try {
     let authenticatedUser = await axios.get('/api/login/auth', getToken());
-    console.log('called after getToken: ', authenticatedUser);
     if (authenticatedUser.data === 'JsonWebTokenError') {
       throw 'User not logged in';
     } else {
       delete authenticatedUser.data.password;
-      console.log(authenticatedUser.data);
       dispatch(_getUser(authenticatedUser.data));
     }
   } catch (err) {

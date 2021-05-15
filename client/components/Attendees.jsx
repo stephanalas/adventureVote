@@ -8,6 +8,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import AttendeeCard from './AttendeeCard';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,14 +21,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Attendees(props) {
+export default connect((state) => state)(function Attendees(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-
+  // const [readyAttendees, setReadyAttendees] = useState(props.attendees);
   const handleClick = () => {
     setOpen(!open);
   };
-  const attendees = props.attendees || [];
+  const attendees = props.attendees;
+  let update;
+  if (props.update) {
+    update = props.update;
+  } else update = false;
   return (
     <List
       component="div"
@@ -40,15 +45,21 @@ export default function Attendees(props) {
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {attendees.map((attendee) => {
-            return (
-              <ListItem button className={classes.nested}>
-                <AttendeeCard attendee={attendee} key={attendee.id} />
-              </ListItem>
-            );
-          })}
+          {attendees
+            ? attendees.map((attendee) => {
+                return (
+                  <ListItem button className={classes.nested}>
+                    <AttendeeCard
+                      attendee={attendee}
+                      key={attendee.id}
+                      update={update}
+                    />
+                  </ListItem>
+                );
+              })
+            : null}
         </List>
       </Collapse>
     </List>
   );
-}
+});

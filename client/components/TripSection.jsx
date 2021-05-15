@@ -5,7 +5,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import AttendeeCard from './AttendeeCard';
 import TripLineItem from './TripLineItem';
 import { makeStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
@@ -13,7 +12,6 @@ import getTrips from '../store/actions/getTrips';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
   nested: {
@@ -36,7 +34,6 @@ export default connect(
   const handleClick = () => {
     setOpen(!open);
   };
-  console.log(props, 'from trip section');
   if (!props.user.user) {
     // props.getTrips();
   }
@@ -75,7 +72,7 @@ export default connect(
           {trips.map((trip) => {
             return (
               <ListItem button className={classes.nested}>
-                <TripLineItem trip={trip} />
+                <TripLineItem history={props.history} trip={trip} />
               </ListItem>
             );
           })}

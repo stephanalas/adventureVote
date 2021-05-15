@@ -1,9 +1,15 @@
+import { CREATE_EVENT } from '../actions/createEvent';
 import { CREATE_TRIP } from '../actions/createTrip';
 import { DELETE_TRIP } from '../actions/deleteTrip';
 import { GET_TRIPS } from '../actions/getTrips';
 
 export default (state = [], action) => {
-  if (action.type === CREATE_TRIP || action.type === GET_TRIPS) {
+  if (
+    action.type === CREATE_TRIP ||
+    action.type === GET_TRIPS ||
+    action.type === CREATE_EVENT ||
+    action.type === DELETE_TRIP
+  ) {
     return action.trips;
   }
   if (action.type === DELETE_TRIP) {

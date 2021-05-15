@@ -19,6 +19,11 @@ const useStyles = makeStyles({
     marginLeft: '1rem',
     boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
     zIndex: '-4',
+    width: '100%',
+  },
+  gridForTrips: {
+    width: '100%',
+    height: '100%',
   },
   userNavigation: {
     width: '20%',
@@ -59,6 +64,7 @@ export default connect(
   let trips;
   if (props.user.user) trips = props.user.user.trips;
   else trips = [];
+  console.log('from mainview', props);
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12} sm={3} className={classes.userNavigation}>
@@ -70,13 +76,25 @@ export default connect(
       <Grid item xs={12} sm={2} className={classes.lineContainer}>
         <Divider orientation="vertical" />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={6} className={classes.gridForTrips}>
         {/* flexbox the paper element */}
         <Paper className={classes.paper}>
           <Typography>Trips</Typography>
-          <TripSection trips={trips} sectionName={'My Trips'} />
-          <TripSection trips={trips} sectionName={'Invited Trips'} />
-          <TripSection trips={trips} sectionName={'Past Trips'} />
+          <TripSection
+            trips={trips}
+            history={props.history}
+            sectionName={'My Trips'}
+          />
+          <TripSection
+            trips={trips}
+            history={props.history}
+            sectionName={'Invited Trips'}
+          />
+          <TripSection
+            trips={trips}
+            history={props.history}
+            sectionName={'Past Trips'}
+          />
           {/* {trips.length ? (
             trips.map((trip) => <TripCard key={trip.id} trip={trip} />)
           ) : (

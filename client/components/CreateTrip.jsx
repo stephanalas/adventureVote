@@ -20,7 +20,6 @@ const CreateTrip = (props) => {
   const [returnDate, setReturnDate] = useState('');
   const [tripName, setTripName] = useState('');
   const [location, setLocation] = useState('');
-  console.log(returnDate);
   const tripNameInput = (ev) => {
     setTripName(ev.target.value);
   };

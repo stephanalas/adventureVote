@@ -68,6 +68,20 @@ Trip.init(
           status: 'going',
         });
       },
+      beforeDestroy: async (trip) => {
+        try {
+          const attendees = await Attendee.findAll({
+            where: {
+              tripId: trip.id,
+            },
+          });
+          attendees.forEach(async (attendee) => {
+            await attendee.destroy();
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      },
     },
   }
 );

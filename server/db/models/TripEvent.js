@@ -10,11 +10,18 @@ TripEvent.init(
     },
     location: {
       type: DataTypes.STRING,
-      allowNull: false,
+    },
+    departureDate: {
+      type: DataTypes.STRING,
+    },
+    returnDate: {
+      type: DataTypes.STRING,
     },
     startTime: {
-      type: DataTypes.DATE,
-      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    endTime: {
+      type: DataTypes.STRING,
     },
     activity: {
       type: DataTypes.STRING,

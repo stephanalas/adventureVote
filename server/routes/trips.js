@@ -19,5 +19,26 @@ trips.get('/', (req, res, next) => {
     res.send(trips).status(200);
   });
 });
+trips.get('/:tripId', (req, res, next) => {
+  Trip.findOne({
+    where: {
+      id: req.params.tripId,
+    },
+    include: [
+      {
+        model: TripEvent,
+      },
+      {
+        model: User,
+        as: 'creator',
+      },
+      {
+        model: Attendee,
+      },
+    ],
+  }).then((trips) => {
+    res.send(trips).status(200);
+  });
+});
 
 module.exports = trips;

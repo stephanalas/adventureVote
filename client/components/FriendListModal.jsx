@@ -53,7 +53,7 @@ export default connect((state) => state)(function FriendListModal(props) {
     const newAttendeeList = props.user.user.friends.filter((friend) => {
       if (attendeesList.includes(friend.username)) return friend;
     });
-    props.setSelectedAttendees(newAttendeeList);
+    props.setSelectedAttendees(newAttendeeList.concat(props.selectedAttendees));
     setOpen(false);
   };
   let friends;

@@ -9,6 +9,9 @@ import getUsers from '../store/actions/getUsers';
 import MyFriends from './MyFriends';
 import CreateTrip from './CreateTrip';
 import NotificationModal from './NotificationModal';
+import CreateEvent from './CreateEvent';
+import UpdateTrip from './updateTrip';
+import CreateEventModal from './CreateEventModal';
 export default connect(
   (state) => state,
   (dispatch) => {
@@ -27,12 +30,13 @@ export default connect(
     <HashRouter>
       <Route component={Nav} />
       <Switch>
-        <Route component={NotificationModal} path="/test" exact />
+        <Route component={CreateEventModal} path="/test" exact />
         {id ? <Route component={MainLoginSignup} path="/" exact /> : null}
 
         {id ? <Route component={UserMainView} path="/home" /> : null}
         <Route component={CreateTrip} path="/createTrip" exact />
         <Route component={MyFriends} path="/friends" exact />
+        <Route component={UpdateTrip} path="/updateTrip/trip/:tripId" exact />
       </Switch>
     </HashRouter>
   );

@@ -125,8 +125,6 @@ users.delete('/:userId/trips/:tripId', async (req, res, next) => {
         id: req.params.tripId,
       },
     });
-    console.log(typeof req.params.userId);
-    console.log(typeof trip.creatorId);
     if (trip.creatorId !== parseInt(req.params.userId)) {
       throw Error('Unable to delete trip!');
     }
@@ -199,10 +197,46 @@ users.put('/:userId/trips/:tripId', (req, res, next) => {
 
 // create event for user's trip
 users.post('/:userId/trips/:tripId/events', (req, res, next) => {
-  const { name, location, startTime, activity } = req.body;
+  // name: {
+  //     type: DataTypes.STRING,
+  //   },
+  //   location: {
+  //     type: DataTypes.STRING,
+  //   },
+  //   departureDate: {
+  //     type: DataTypes.STRING,
+  //   },
+  //   returnDate: {
+  //     type: DataTypes.STRING,
+  //   },
+  //   startTime: {
+  //     type: DataTypes.STRING,
+  //   },
+  //   endTime: {
+  //     type: DataTypes.STRING,
+  //   },
+  //   activity: {
+  //     type: DataTypes.STRING,
+  //   },
+  //   voteCount: {
+  //     type: DataTypes.INTEGER,
+  //     allowNull: true,
+  //   },
+  const {
+    name,
+    location,
+    departureDate,
+    returnDate,
+    startTime,
+    endTime,
+    activity,
+  } = req.body;
   TripEvent.create({
     name,
     location,
+    departureDate,
+    returnDate,
+    endTime,
     startTime,
     activity,
     creatorId: req.params.userId,
