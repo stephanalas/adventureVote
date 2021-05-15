@@ -37,8 +37,7 @@ export default connect(
         <Button onClick={() => props.deleteTrip(props.user.user.id, trip.id)}>
           Delete Trip
         </Button>
-      ) : null}
-      s{' '}
+      ) : null}{' '}
     </ListItem>
   );
 });
