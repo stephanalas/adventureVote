@@ -56,7 +56,20 @@ User.byToken = async (token) => {
         },
         {
           model: Trip,
-          include: TripEvent,
+          include: [
+            {
+              model: TripEvent,
+            },
+            {
+              model: User,
+              as: 'creator',
+            },
+            {
+              model: User,
+              through: Attendee,
+              as: 'attendees',
+            },
+          ],
         },
       ],
     });

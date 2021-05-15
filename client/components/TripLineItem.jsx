@@ -22,11 +22,7 @@ export default connect(
   } else {
     user = {};
   }
-  console.log('from line', props);
-  if (trip.creatorId === user.id) {
-    console.log('true');
-  }
-  console.log(trip.creatorId);
+  console.log(trip, 'from trip line item');
   return (
     <ListItem key={trip.id}>
       <ListItemAvatar>

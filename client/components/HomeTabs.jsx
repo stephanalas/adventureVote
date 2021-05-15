@@ -91,11 +91,7 @@ export default connect((state) => state)((props) => {
           </Button>
         </Typography>
       </Grid>
-      <Grid item className={classes.option}>
-        <Typography className={classes.typography}>
-          <Button className={classes.button}>Past Trips</Button>
-        </Typography>
-      </Grid>
+
       <Grid item className={classes.option}>
         <Typography className={classes.typography}>
           <Button className={classes.button} onClick={handleOpen}>

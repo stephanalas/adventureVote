@@ -13,6 +13,7 @@ export const _updateTrip = (trip, user) => {
 export default (userId, tripId, tripInfo, attendees = []) =>
   async (dispatch) => {
     try {
+      console.log(userId, tripInfo, 'from thunky');
       const response = await axios.put(
         `/api/users/${userId}/trips/${tripId}`,
         tripInfo
@@ -31,7 +32,8 @@ export default (userId, tripId, tripInfo, attendees = []) =>
       }
 
       const updatedTrip = response.data;
-      const userResponse = await axios.get(`/api/user/${userId}`);
+      console.log(updatedTrip);
+      const userResponse = await axios.get(`/api/users/${userId}`);
       dispatch(updatdTrip, userResponse.data);
     } catch (error) {
       console.log(error);

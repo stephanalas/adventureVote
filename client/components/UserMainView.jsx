@@ -64,7 +64,6 @@ export default connect(
   let trips;
   if (props.user.user) trips = props.user.user.trips;
   else trips = [];
-  console.log('from mainview', props);
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12} sm={3} className={classes.userNavigation}>

@@ -12,7 +12,9 @@ trips.get('/', (req, res, next) => {
         as: 'creator',
       },
       {
-        model: Attendee,
+        model: User,
+        through: Attendee,
+        as: 'attendees',
       },
     ],
   }).then((trips) => {
@@ -21,9 +23,6 @@ trips.get('/', (req, res, next) => {
 });
 trips.get('/:tripId', (req, res, next) => {
   Trip.findOne({
-    where: {
-      id: req.params.tripId,
-    },
     include: [
       {
         model: TripEvent,
@@ -33,7 +32,9 @@ trips.get('/:tripId', (req, res, next) => {
         as: 'creator',
       },
       {
-        model: Attendee,
+        model: User,
+        through: Attendee,
+        as: 'attendees',
       },
     ],
   }).then((trips) => {

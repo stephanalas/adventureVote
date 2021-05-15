@@ -73,6 +73,7 @@ const CreateTrip = (props) => {
         setDepartureDate={setDepartureDate}
         departureDate={departureDate}
         returnDate={returnDate}
+        create={true}
       />
       <FriendListModal
         selectedAttendees={selectedAttendees}

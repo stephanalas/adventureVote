@@ -28,8 +28,11 @@ export default function EventList(props) {
     setOpen(!open);
   };
   let events;
-  if (props.trip.events) {
+  console.log('in event list', props);
+  const trip = props.trip || {};
+  if (trip.id) {
     events = props.trip.events;
+    console.log(events);
   } else events = [];
   return (
     <List

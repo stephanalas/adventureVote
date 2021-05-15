@@ -10,13 +10,11 @@ import {
 
 export default function TimePickers(props) {
   const handleDepartureDateChange = (date) => {
-    console.log(date);
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const year = date.getFullYear();
     const formatDate = month + '/' + day + '/' + year;
     props.setDepartureDate(formatDate);
-    console.log('dates should be saved in state');
   };
   const handleReturnDateChange = (date) => {
     const month = date.getMonth() + 1;
@@ -24,7 +22,6 @@ export default function TimePickers(props) {
     const year = date.getFullYear();
     const formatDate = month + '/' + day + '/' + year;
     props.setReturnDate(formatDate);
-    console.log('dates should be saved in state');
   };
   function formatAMPM(date) {
     var hours = date.getHours();
@@ -36,19 +33,23 @@ export default function TimePickers(props) {
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
   }
-
   const handleStartTimeChange = (time) => {
     props.setStartTime(formatAMPM(time));
   };
   const handleEndTimeChange = (time) => {
     props.setEndTime(formatAMPM(time));
   };
+  let user;
+  if (props.user) {
+    user = props.user.user;
+  } else user = {};
+  const trip = props.trip || {};
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container justify="space-around">
         <Grid item>
           <KeyboardDatePicker
-            inputValue={props.departureDate}
+            inputValue={props.create ? props.departureDate : trip.departureDate}
             disablePast
             autoOk
             variant="inline"
@@ -56,14 +57,16 @@ export default function TimePickers(props) {
             margin="normal"
             id="depature-date"
             label="Departure Date"
+            disabled={trip.creatorId !== user.id}
             onChange={handleDepartureDateChange}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
           />
           <KeyboardDatePicker
-            inputValue={props.returnDate}
+            inputValue={props.create ? props.returnDate : trip.returnDate}
             autoOk
+            disabled={trip.creatorId !== user.id}
             margin="normal"
             variant="inline"
             id="return-date"

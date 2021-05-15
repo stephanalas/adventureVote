@@ -46,6 +46,7 @@ export default connect(
   let trips;
   if (props.user.user) {
     trips = props.user.user.trips;
+    console.log('line 49 in Trip Section', trips);
   } else trips = [];
   if (props.sectionName === 'Past Trips') {
     const now = new Date().getMonth();

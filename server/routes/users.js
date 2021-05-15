@@ -143,6 +143,20 @@ users.get('/:id/trips', requireToken, async (req, res, next) => {
       where: {
         creatorId: req.user.id,
       },
+      include: [
+        {
+          model: TripEvent,
+        },
+        {
+          model: User,
+          as: 'creator',
+        },
+        {
+          model: User,
+          through: Attendee,
+          as: 'attendees',
+        },
+      ],
     });
     const potentialTripsAttending = await Attendee.findAll({
       where: {
@@ -181,11 +195,26 @@ users.get('/:id/trips', requireToken, async (req, res, next) => {
 
 users.put('/:userId/trips/:tripId', (req, res, next) => {
   const { name, location, departureDate, returnDate } = req.body;
+  console.log();
   Trip.findOne({
     where: {
       id: req.params.tripId,
       creatorId: req.params.userId,
     },
+    include: [
+      {
+        model: TripEvent,
+      },
+      {
+        model: User,
+        as: 'creator',
+      },
+      {
+        model: User,
+        through: Attendee,
+        as: 'attendees',
+      },
+    ],
   }).then((trip) => {
     trip.name = name;
     trip.location = location;

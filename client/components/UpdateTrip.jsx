@@ -1,4 +1,4 @@
-import { Button, Grid, makeStyles } from '@material-ui/core';
+import { Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import TimePickers from './TimePickers';
 import { connect } from 'react-redux';
@@ -19,29 +19,26 @@ const useStyles = makeStyles(() => ({
 const UpdateTrip = (props) => {
   const [trip, setTrip] = useState({});
   const classes = useStyles();
-  const [selectedAttendees, setSelectedAttendees] = useState(trip.Attendees);
-  const [departureDate, setDepartureDate] = useState(trip.departureDate);
-  const [returnDate, setReturnDate] = useState(trip.returnDate);
-  const [tripName, setTripName] = useState(trip.name);
-  const [location, setLocation] = useState(trip.location);
+  const [selectedAttendees, setSelectedAttendees] = useState([]);
+  const [departureDate, setDepartureDate] = useState('');
+  const [returnDate, setReturnDate] = useState('');
+  const [tripName, setTripName] = useState('');
+  const [location, setLocation] = useState('');
   useEffect(() => {
     if (!trip.id) {
-      getTrip();
+      getTrip(props.match.params.tripId);
     }
   }, []);
-  const getTrip = async () => {
+  const getTrip = async (id) => {
     try {
-      const response = await axios.get(
-        `/api/trips/${props.match.params.tripId}`
-      );
+      const response = await axios.get(`/api/trips/${id}}`);
 
       setTrip(response.data);
-      setSelectedAttendees(response.data.Attendees);
+      // setSelectedAttendees(response.data.Attendees);
     } catch (error) {
       console.log(error);
     }
   };
-
   // if (!props.trip) await axios.get('/api/trips/${props.match.params.tripId');
   const tripNameInput = (ev) => {
     setTripName(ev.target.value);
@@ -61,7 +58,7 @@ const UpdateTrip = (props) => {
       departureDate,
       returnDate,
     };
-    if (!departureDate.length) {
+    if (!departureDate) {
       payload['departureDate'] = formatDate;
     } else if (!returnDate.length) {
       payload['returnDate'] = formatDate;
@@ -69,40 +66,56 @@ const UpdateTrip = (props) => {
       payload['departureDate'] = formatDate;
       payload['returnDate'] = formatDate;
     }
-    props.updateTrip(props.user.user.id, payload, selectedAttendees);
+    props.updateTrip(props.user.user.id, trip.id, payload, selectedAttendees);
     // props.history.push('/home');
   };
-  console.log(selectedAttendees, 'From update trip component');
+  let user;
+  let newTrip;
+  if (props.user.user) {
+    user = props.user.user;
+    newTrip = user.trips.find(
+      (trip) => trip.id === props.match.params.tripId * 1
+    );
+    console.log('near new trip line 76', newTrip);
+  } else {
+    user = {};
+    // newTrip = {};
+  }
+  const labelname = newTrip || {};
+
   return (
     <Grid className={classes.root}>
+      <Typography>Update Trip</Typography>
+      <Typography>{labelname[0]}</Typography>
       <TextField
         id="trip-name-input"
-        label={trip.name}
+        label="New Trip Name"
         placeholder="vacation"
         variant="filled"
         onChange={tripNameInput}
-        required
+        disabled={trip.creatorId !== user.id}
       />
       <TextField
         id="location-input"
-        label={trip.location}
+        label="Location Name"
         placeholder="i.e. Hawaii"
         variant="filled"
         onChange={locationInput}
-        required
+        disabled={trip.creatorId !== user.id}
       />
       <TimePickers
         setReturnDate={setReturnDate}
         setDepartureDate={setDepartureDate}
         departureDate={departureDate}
         returnDate={returnDate}
+        trip={trip}
       />
       <FriendListModal
         selectedAttendees={selectedAttendees}
         setSelectedAttendees={setSelectedAttendees}
       />
       <CreateEventModal trip={trip} />
-      <EventList trip={trip} />
+      <EventList trip={newTrip} />
       <Attendees attendees={selectedAttendees} update={true} />
       <Button onClick={handleClick}>Update Trip</Button>
     </Grid>
