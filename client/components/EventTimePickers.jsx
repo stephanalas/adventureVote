@@ -8,7 +8,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-export default function TimePickers(props) {
+export default function EventTimePickers(props) {
   const handleDepartureDateChange = (date) => {
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -40,21 +40,12 @@ export default function TimePickers(props) {
   const handleEndTimeChange = (time) => {
     props.setEndTime(formatAMPM(time));
   };
-  let user;
-  if (props.user) {
-    user = props.user.user;
-    if (props.newUser) {
-      console.log('i ran in update trip');
-      user = props.newUser;
-    }
-  } else user = {};
-  const trip = props.trip || {};
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container justify="space-around">
         <Grid item>
           <KeyboardDatePicker
-            inputValue={props.departureDate}
             disablePast
             autoOk
             variant="inline"
@@ -62,16 +53,13 @@ export default function TimePickers(props) {
             margin="normal"
             id="depature-date"
             label="Departure Date"
-            disabled={trip.creatorId !== props.userId}
             onChange={handleDepartureDateChange}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
           />
           <KeyboardDatePicker
-            inputValue={props.returnDate}
             autoOk
-            disabled={trip.creatorId !== props.userId}
             margin="normal"
             variant="inline"
             id="return-date"
@@ -90,7 +78,6 @@ export default function TimePickers(props) {
               id="start-time-picker"
               label="Start Time"
               autoOk
-              inputValue={props.startTime}
               onChange={handleStartTimeChange}
               KeyboardButtonProps={{
                 'aria-label': 'change time',
@@ -103,7 +90,6 @@ export default function TimePickers(props) {
               margin="normal"
               id="end-time-picker"
               label="End Time"
-              inputValue={props.endTime}
               onChange={handleEndTimeChange}
               KeyboardButtonProps={{
                 'aria-label': 'change time',

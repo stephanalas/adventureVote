@@ -7,6 +7,7 @@ import FriendListModal from './FriendListModal';
 import Attendees from './Attendees';
 
 import createEvent from '../store/actions/createEvent';
+import EventTimePickers from './EventTimePickers';
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
@@ -28,7 +29,7 @@ const CreateEvent = (props) => {
   const locationInput = (ev) => {
     setLocation(ev.target.value);
   };
-  const handleClick = () => {
+  const handleClick = (tripId) => {
     const newDate = new Date();
     const month = newDate.getMonth() + 1;
     const day = newDate.getDate();
@@ -50,11 +51,12 @@ const CreateEvent = (props) => {
       payload['departureDate'] = formatDate;
       payload['returnDate'] = formatDate;
     }
-    props.createEvent(props.user.user.id, payload, props.trip.id);
+    props.createEvent(props.user.user.id, payload, tripId);
     // props.history.push('/home');
     props.setOpen(false);
-    window.location.reload(false);
+    // window.location.reload(false);
   };
+  const trip = props.trip || [];
   return (
     <Grid className={classes.root}>
       <TextField
@@ -73,7 +75,7 @@ const CreateEvent = (props) => {
         onChange={locationInput}
         required
       />
-      <TimePickers
+      {/* <TimePickers
         setReturnDate={setReturnDate}
         setDepartureDate={setDepartureDate}
         departureDate={departureDate}
@@ -83,8 +85,15 @@ const CreateEvent = (props) => {
         setEndTime={setEndTime}
         startTime={startTime}
         endTime={endTime}
+        trip={trip}
+      /> */}
+      <EventTimePickers
+        setReturnDate={setReturnDate}
+        setDepartureDate={setDepartureDate}
+        setStartTime={setStartTime}
+        setEndTime={setEndTime}
       />
-      <Button onClick={handleClick}>Create Event</Button>
+      <Button onClick={() => handleClick(trip.id)}>Create Event</Button>
     </Grid>
   );
 };

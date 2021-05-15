@@ -1,6 +1,7 @@
 import axios from 'axios';
+import getToken from '../../utils/getToken';
 
-const UPDATE_TRIP = 'UPDATE_TRIP';
+export const UPDATE_TRIP = 'UPDATE_TRIP';
 
 export const _updateTrip = (trip, user) => {
   return {
@@ -13,7 +14,6 @@ export const _updateTrip = (trip, user) => {
 export default (userId, tripId, tripInfo, attendees = []) =>
   async (dispatch) => {
     try {
-      console.log(userId, tripInfo, 'from thunky');
       const response = await axios.put(
         `/api/users/${userId}/trips/${tripId}`,
         tripInfo
@@ -32,9 +32,8 @@ export default (userId, tripId, tripInfo, attendees = []) =>
       }
 
       const updatedTrip = response.data;
-      console.log(updatedTrip);
-      const userResponse = await axios.get(`/api/users/${userId}`);
-      dispatch(updatdTrip, userResponse.data);
+      const userResponse = await axios.get(`/api/users/${userId}`, getToken());
+      dispatch(_updateTrip(updatedTrip, userResponse.data));
     } catch (error) {
       console.log(error);
     }

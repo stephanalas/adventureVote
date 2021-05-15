@@ -215,13 +215,17 @@ users.put('/:userId/trips/:tripId', (req, res, next) => {
         as: 'attendees',
       },
     ],
-  }).then((trip) => {
-    trip.name = name;
-    trip.location = location;
-    trip.departureDate = departureDate;
-    trip.returnDate = returnDate;
-    res.send(trip).status(200);
-  });
+  })
+    .then(async (trip) => {
+      console.log(trip);
+      trip.name = name;
+      trip.location = location;
+      trip.departureDate = departureDate;
+      trip.returnDate = returnDate;
+      await trip.save();
+      res.send(trip).status(200);
+    })
+    .catch((error) => error);
 });
 
 // create event for user's trip

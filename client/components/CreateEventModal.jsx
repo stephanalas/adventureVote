@@ -45,17 +45,17 @@ export default connect((state) => state)(function EventListModal(props) {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleClick = () => {
-    const attendeesList = [];
-    for (let attender in attendees) {
-      if (attendees[attender]) attendeesList.push(attender);
-    }
-    const newAttendeeList = props.user.user.friends.filter((friend) => {
-      if (attendeesList.includes(friend.username)) return friend;
-    });
-    props.setSelectedAttendees(newAttendeeList);
-    setOpen(false);
-  };
+  // const handleClick = () => {
+  //   const attendeesList = [];
+  //   for (let attender in attendees) {
+  //     if (attendees[attender]) attendeesList.push(attender);
+  //   }
+  //   const newAttendeeList = props.user.user.friends.filter((friend) => {
+  //     if (attendeesList.includes(friend.username)) return friend;
+  //   });
+  //   props.setSelectedAttendees(newAttendeeList);
+  //   setOpen(false);
+  // };
   let friends;
   const trip = props.trip || {};
   if (props.user.user) {

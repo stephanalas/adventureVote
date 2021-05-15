@@ -32,7 +32,6 @@ const UpdateTrip = (props) => {
   const getTrip = async (id) => {
     try {
       const response = await axios.get(`/api/trips/${id}}`);
-
       setTrip(response.data);
       // setSelectedAttendees(response.data.Attendees);
     } catch (error) {
@@ -46,7 +45,7 @@ const UpdateTrip = (props) => {
   const locationInput = (ev) => {
     setLocation(ev.target.value);
   };
-  const handleClick = () => {
+  const handleClick = (userId, tripId) => {
     const newDate = new Date();
     const month = newDate.getMonth() + 1;
     const day = newDate.getDate();
@@ -66,7 +65,7 @@ const UpdateTrip = (props) => {
       payload['departureDate'] = formatDate;
       payload['returnDate'] = formatDate;
     }
-    props.updateTrip(props.user.user.id, trip.id, payload, selectedAttendees);
+    props.updateTrip(userId, tripId, payload, selectedAttendees);
     // props.history.push('/home');
   };
   let user;
@@ -76,50 +75,98 @@ const UpdateTrip = (props) => {
     newTrip = user.trips.find(
       (trip) => trip.id === props.match.params.tripId * 1
     );
-    console.log('near new trip line 76', newTrip);
   } else {
     user = {};
-    // newTrip = {};
   }
-  const labelname = newTrip || {};
-
-  return (
-    <Grid className={classes.root}>
-      <Typography>Update Trip</Typography>
-      <Typography>{labelname[0]}</Typography>
-      <TextField
-        id="trip-name-input"
-        label="New Trip Name"
-        placeholder="vacation"
-        variant="filled"
-        onChange={tripNameInput}
-        disabled={trip.creatorId !== user.id}
-      />
-      <TextField
-        id="location-input"
-        label="Location Name"
-        placeholder="i.e. Hawaii"
-        variant="filled"
-        onChange={locationInput}
-        disabled={trip.creatorId !== user.id}
-      />
-      <TimePickers
-        setReturnDate={setReturnDate}
-        setDepartureDate={setDepartureDate}
-        departureDate={departureDate}
-        returnDate={returnDate}
-        trip={trip}
-      />
-      <FriendListModal
-        selectedAttendees={selectedAttendees}
-        setSelectedAttendees={setSelectedAttendees}
-      />
-      <CreateEventModal trip={trip} />
-      <EventList trip={newTrip} />
-      <Attendees attendees={selectedAttendees} update={true} />
-      <Button onClick={handleClick}>Update Trip</Button>
-    </Grid>
-  );
+  let name;
+  if (newTrip) {
+    name = newTrip.name;
+    console.log(newTrip.id, 'if statement in UpdateTrip for events');
+    return (
+      <Grid className={classes.root}>
+        <Typography>Update Trip</Typography>
+        <Typography>{name}</Typography>
+        <TextField
+          id="trip-name-input"
+          label="New Trip Name"
+          placeholder="vacation"
+          variant="filled"
+          onChange={tripNameInput}
+          disabled={newTrip.creatorId !== user.id}
+        />
+        <TextField
+          id="location-input"
+          label="Location Name"
+          placeholder="i.e. Hawaii"
+          variant="filled"
+          onChange={locationInput}
+          disabled={newTrip.creatorId !== user.id}
+        />
+        <TimePickers
+          setReturnDate={setReturnDate}
+          setDepartureDate={setDepartureDate}
+          departureDate={departureDate}
+          returnDate={returnDate}
+          trip={newTrip}
+          userId={user.id}
+          // user={user}
+        />
+        <FriendListModal
+          selectedAttendees={selectedAttendees}
+          setSelectedAttendees={setSelectedAttendees}
+        />
+        <CreateEventModal trip={newTrip} />
+        <EventList trip={newTrip} />
+        <Attendees attendees={selectedAttendees} update={true} />
+        <Button onClick={() => handleClick(user.id, newTrip.id)}>
+          Update Trip
+        </Button>
+      </Grid>
+    );
+  } else {
+    name = '';
+    console.log(trip.id, 'else statement in UpdateTrip for events');
+    return (
+      <Grid className={classes.root}>
+        <Typography>Update Trip</Typography>
+        <Typography>{name}</Typography>
+        <TextField
+          id="trip-name-input"
+          label="New Trip Name"
+          placeholder="vacation"
+          variant="filled"
+          onChange={tripNameInput}
+          disabled={trip.creatorId !== user.id}
+        />
+        <TextField
+          id="location-input"
+          label="Location Name"
+          placeholder="i.e. Hawaii"
+          variant="filled"
+          onChange={locationInput}
+          disabled={trip.creatorId !== user.id}
+        />
+        <TimePickers
+          setReturnDate={setReturnDate}
+          setDepartureDate={setDepartureDate}
+          departureDate={departureDate}
+          returnDate={returnDate}
+          trip={trip}
+          newUser={user}
+        />
+        <FriendListModal
+          selectedAttendees={selectedAttendees}
+          setSelectedAttendees={setSelectedAttendees}
+        />
+        <CreateEventModal trip={trip} />
+        <EventList trip={trip} />
+        <Attendees attendees={selectedAttendees} update={true} />
+        <Button onClick={() => handleClick(user.id, trip.id)}>
+          Update Trip
+        </Button>
+      </Grid>
+    );
+  }
 };
 
 export default connect(
